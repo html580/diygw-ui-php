@@ -3,3 +3,4 @@
 /runtime
 *.log
 .env
+config/install.lock
