@@ -4,3 +4,5 @@
 *.log
 .env
 config/install.lock
+public/assets
+public/index.html
