@@ -10,5 +10,6 @@ return [
         'diygw:command ' => 'app\command\DiygwCommand',
         'diygw:model' => 'app\command\DiygwModelCommand',
         'diygw:validate' => 'app\command\DiygwValidateCommand',
+        'diygw:wechat' => 'app\command\DiygwWechatCommand',
     ],
 ];

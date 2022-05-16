@@ -1,8 +1,12 @@
 <?php
 namespace app\admin\controller;
 use app\BaseController;
-use app\common\model\UserModel;
+
+use app\common\model\DiyUserModel;
 use app\sys\model\RoleModel;
+
+use app\sys\model\UserModel;
+use EasyWeChat\Factory;
 use thans\jwt\facade\JWTAuth;
 use think\facade\Db;
 
@@ -20,7 +24,7 @@ class LoginController extends BaseController
         //获取用户模型
         $model = new UserModel();
         //查询用户
-        $user = $model::getByUsername($username);
+        $user = $model->where('username',$username)->find();
         if(empty($user)|| ($user && md5($password.$user->salt) != $user->password)){
             $params['username'] = $username;
             $params['status'] = '0';
@@ -35,7 +39,8 @@ class LoginController extends BaseController
             $auths=[];
             //获取用户角色
             if(!empty($user['roleIds'])){
-                $roleList = RoleModel::whereIn('role_id',explode(",",$data['roleIds']))->select()->toArray();
+                $roleModel = new RoleModel();
+                $roleList = $roleModel->whereIn('role_id',explode(",",$data['roleIds']))->select()->toArray();
                 foreach ($roleList as $role){
                     $roles[]=$role['roleKey'];
                 }
@@ -55,6 +60,56 @@ class LoginController extends BaseController
             $params['status'] = '1';
             event('LoginLog', $params);
             return $this->successData($data);
+        }
+    }
+
+    public function auth(){
+        $type = $this->request->post('type');
+        if(method_exists($this,$type)){
+            return $this->$type();
+        }else{
+            return $this->error('请实现'.$type.'相关登录方法');
+        }
+    }
+
+
+    public function weixin(){
+        $userInfo = json_decode($this->request->post('userInfo'),true);
+        $code = $this->request->post('code');
+        $minConfig = config('wechat.mini_program');
+        $app = Factory::miniProgram($minConfig);
+        $auth = $app->auth;
+        $opendata = $auth->session($code);
+        if(isset($opendata['openid'])){
+            $session_key = $opendata['session_key'];
+            $openid = $opendata['openid'];
+            $type = 'weixin';
+            $model = new DiyUserModel();
+            //查找获取微信小程序用户
+            $user = $model->where('openid',$openid)->where('type',$type)->find();
+            $data['openid'] = $openid;
+            $data['type'] = $type;
+            $data['nickname'] = $userInfo['nickName'];
+            $data['avatar'] = $userInfo['avatarUrl'];
+            $data['country'] = $userInfo['country'];
+            $data['province'] = $userInfo['province'];
+            $data['gender'] = $userInfo['gender'];
+
+            if($user){
+                $userId = $user['userId'];
+                $user->save($data);
+            }else{
+                $model = new DiyUserModel();
+                $model->save($data);
+                $userId = $model->getLastInsID();
+                $data['id'] = $userId;
+            }
+            $token = "bearer".JWTAuth::builder(['uid' => $userId]);
+            $opendata['token'] = $token;
+            $data = array_merge($data,$opendata);
+            return $this->successData($data);
+        }else{
+            return $this->errorData($opendata,'登录失败');
         }
     }
 }

@@ -84,7 +84,9 @@ abstract class DiygwMakeCommand extends Make
 
         if (strpos($name, '@')) {
             [$app, $name] = explode('@', $name);
-            $this->module = $app."_";
+            if($app!='common'){
+                $this->module = $app."_";
+            }
         } else {
             $app = '';
         }

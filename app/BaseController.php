@@ -9,6 +9,7 @@ use think\App;
 use think\exception\HttpResponseException;
 use think\exception\ValidateException;
 use think\facade\View;
+use think\helper\Str;
 use think\Response;
 use think\response\Json;
 use thans\jwt\exception\TokenBlacklistException;
@@ -274,12 +275,24 @@ abstract class BaseController
      */
     public function add()
     {
+        $data = $this->request->param();
+        $pk = $this->diygwPk();
+        $id = $data[Str::camel($pk)];
+
         if($this->checkData()){
-            $data = $this->request->param();
-            if($this->model->add($data)){
-                return $this->success('新增成功');
+            //如果对应的主要不为空，表示修改记录
+            if($id){
+                if ($this->model->edit($data)) {
+                    return $this->success('修改成功');
+                } else {
+                    return $this->error('修改失败');
+                }
             }else{
-                return $this->error('新增失败');
+                if($this->model->add($data)){
+                    return $this->success('新增成功');
+                }else{
+                    return $this->error('新增失败');
+                }
             }
         }
     }

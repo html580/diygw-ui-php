@@ -26,7 +26,8 @@
         "topthink/think-multi-app": "^1.0",
         "thans/tp-jwt-auth": "^1.2",
         "itbdw/ip-database": "^3.0",
-        "topthink/think-view": "^1.0"
+        "topthink/think-view": "^1.0",
+        "overtrue/wechat": "~4.0"
     },
     "require-dev": {
         "symfony/var-dumper": "^4.2",

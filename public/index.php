@@ -21,7 +21,6 @@ if (!file_exists(__DIR__ .'/../config/install.lock')) {
     }else{
         $response = $http->run();
     }
-
 }else{
     $response = $http->run();
 }
