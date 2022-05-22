@@ -94,9 +94,8 @@ class LoginController extends BaseController
             $data['country'] = $userInfo['country'];
             $data['province'] = $userInfo['province'];
             $data['gender'] = $userInfo['gender'];
-
             if($user){
-                $userId = $user['userId'];
+                $userId =  $user->toArray()['id'];
                 $user->save($data);
             }else{
                 $model = new DiyUserModel();

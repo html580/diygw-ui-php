@@ -35,24 +35,22 @@ class AuthTokenMiddleware
         if ($controllerClass->isNotNeedLogin()) {
             return $next($request);
         }
-        $request->userId=1;
-//        try {
-//
-//            $payload = JWTAuth::auth(); //可验证token, 并获取token中的payload部分
-//            $request->userId = $payload['uid']->getValue();
-//        } catch (\Exception $e) {
-//            $msg = '登录过期';
-//            if ($e instanceof TokenExpiredException) {
-//                $msg = '登录过期';
-//            }
-//            if ($e instanceof TokenBlacklistException) {
-//                $msg = '登录被加入黑名单';
-//            }
-//            if ($e instanceof TokenInvalidException) {
-//                $msg = '登录不合法';
-//            }
-//            return json(['code' => 401, 'msg' => $msg]);
-//        }
+        try {
+            $payload = JWTAuth::auth(); //可验证token, 并获取token中的payload部分
+            $request->userId = $payload['uid']->getValue();
+        } catch (\Exception $e) {
+            $msg = '登录过期';
+            if ($e instanceof TokenExpiredException) {
+                $msg = '登录过期';
+            }
+            if ($e instanceof TokenBlacklistException) {
+                $msg = '登录被加入黑名单';
+            }
+            if ($e instanceof TokenInvalidException) {
+                $msg = '登录不合法';
+            }
+            return json(['code' => 401, 'msg' => $msg]);
+        }
 
         return $next($request);
     }

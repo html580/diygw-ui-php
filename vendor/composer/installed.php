@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => 'c861275de84627c9908e7d6bfa1bc6353e14708f',
+        'reference' => '0c6243e46e70403c09407cb17b41c39cf96acb01',
         'name' => 'topthink/think',
         'dev' => true,
     ),
@@ -371,12 +371,12 @@
             'dev_requirement' => false,
         ),
         'symfony/var-dumper' => array(
-            'pretty_version' => 'v4.4.39',
-            'version' => '4.4.39.0',
+            'pretty_version' => 'v4.4.41',
+            'version' => '4.4.41.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/var-dumper',
             'aliases' => array(),
-            'reference' => '35237c5e5dcb6593a46a860ba5b29c1d4683d80e',
+            'reference' => '58eb36075c04aaf92a7a9f38ee9a8b97e24eb481',
             'dev_requirement' => true,
         ),
         'symfony/var-exporter' => array(
@@ -412,7 +412,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => 'c861275de84627c9908e7d6bfa1bc6353e14708f',
+            'reference' => '0c6243e46e70403c09407cb17b41c39cf96acb01',
             'dev_requirement' => false,
         ),
         'topthink/think-helper' => array(
