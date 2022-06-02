@@ -33,11 +33,15 @@ trait BaseDbTrait
             $list['data']= $data;
             $list['total']= count($data);
         }else{
+            $requestParams = \request()->param();
             // 分页列表
             $list =  $this->quickSearch($this->likeField)
                 ->field('*')
                 ->diygwOrder()
-                ->paginate()->toArray();
+                ->paginate([
+                    'list_rows'=> $requestParams['pageSize'],
+                    'var_page' => 'pageNum',
+                ])->toArray();
         }
         //对结果返回前进行处理
         if ($this->afterList($list)) {
