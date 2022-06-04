@@ -34,12 +34,16 @@ trait BaseDbTrait
             $list['total']= count($data);
         }else{
             $requestParams = \request()->param();
+            $pageSize = 10;
+            if(isset($requestParams['pageSize'])){
+                $pageSize = $requestParams['pageSize'];
+            }
             // 分页列表
             $list =  $this->quickSearch($this->likeField)
                 ->field('*')
                 ->diygwOrder()
                 ->paginate([
-                    'list_rows'=> $requestParams['pageSize'],
+                    'list_rows'=> $pageSize,
                     'var_page' => 'pageNum',
                 ])->toArray();
         }

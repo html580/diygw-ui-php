@@ -496,4 +496,21 @@ CREATE TABLE `sys_user`  (
 INSERT INTO `sys_user` VALUES (1, 'admin', '4a8fd11436e09adbf507166bb401dbb0', 'EtVSfA', 'DIY可视化', '15913132246', 1, '', '0', '280160522@qq.com', 2, 1, 'admin', '1', NULL, '0', '2021-12-03 09:46:55', '2021-12-03 10:51:34', NULL, '1', '1');
 INSERT INTO `sys_user` VALUES (12, 'test', '9b0cac64f5e4e142d3d954f33f11629c', 'TnYjBp', 'test', '', NULL, '', '', '', 2, NULL, NULL, NULL, '', '', '2022-05-08 23:15:14', '2022-05-08 23:15:31', '2022-05-08 23:15:31', '', '');
 
+DROP TABLE IF EXISTS `diy_user`;
+CREATE TABLE `diy_user`  (
+                             `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+                             `openid` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户的唯一身份ID',
+                             `realname` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '真实姓名',
+                             `nickname` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '昵称',
+                             `avatar` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '头像',
+                             `gender` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT '0' COMMENT '性别',
+                             `province` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT '' COMMENT '居住省份',
+                             `city` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT '' COMMENT '居住城市',
+                             `create_time` datetime(0) DEFAULT NULL,
+                             `update_time` datetime(0) DEFAULT NULL,
+                             `delete_time` datetime(0) DEFAULT NULL,
+                             `type` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '用户类型',
+                             PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
 SET FOREIGN_KEY_CHECKS = 1;
