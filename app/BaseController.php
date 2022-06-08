@@ -276,12 +276,14 @@ abstract class BaseController
     public function add()
     {
         $data = $this->request->param();
-        $pk = $this->diygwPk();
-        $id = $data[Str::camel($pk)];
+        $pk = $this->model->diygwPk();
 
+        if(isset($data[Str::camel($pk)])){
+            $id = $data[Str::camel($pk)];
+        }
         if($this->checkData()){
             //如果对应的主要不为空，表示修改记录
-            if($id){
+            if(isset($id)){
                 if ($this->model->edit($data)) {
                     return $this->success('修改成功');
                 } else {
@@ -332,7 +334,7 @@ abstract class BaseController
         if($data){
             return $this->successData($data);
         }else{
-            return $this->error('新增失败');
+            return $this->error('获取数据失败');
         }
     }
 

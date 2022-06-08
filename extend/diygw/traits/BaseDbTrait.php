@@ -171,7 +171,12 @@ trait BaseDbTrait
     }
 
     public function get($id){
-        return $this->afterGet(static::where($this->getPk(), $id['id'])->find()->toArray());
+        $data = static::where($this->getPk(), $id['id'])->find();
+        if($data){
+            return $this->afterGet($data->toArray());
+        }else{
+            return $this->afterGet([]);
+        }
     }
     /**
      *

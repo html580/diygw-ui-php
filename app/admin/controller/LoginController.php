@@ -6,6 +6,7 @@ use app\common\model\DiyUserModel;
 use app\sys\model\RoleModel;
 
 use app\sys\model\UserModel;
+use app\sys\validate\UserValidate;
 use EasyWeChat\Factory;
 use thans\jwt\facade\JWTAuth;
 use think\facade\Db;
@@ -17,10 +18,30 @@ class LoginController extends BaseController
     public $notNeedLoginAll = true;
     public $isModel = false;
 
+    /**
+     * 注册用户
+     */
+    public function register()
+    {
+        $userValidate = new UserValidate();
+        $data = $this->request->param();
+        $this->model = new UserModel();
+        if($userValidate->checkData()){
+            if($this->model->add($data)){
+                return $this->success('注册成功');
+            }else{
+                return $this->error('注册失败');
+            }
+        }
+    }
 
+
+    /**
+     * 登录用户
+     */
     public function login(){
-        $username = $this->request->post('username',"diygw");
-        $password = $this->request->post('password','1');
+        $username = $this->request->post('username');
+        $password = $this->request->post('password');
         //获取用户模型
         $model = new UserModel();
         //查询用户
@@ -59,7 +80,7 @@ class LoginController extends BaseController
             $params['username'] = $username;
             $params['status'] = '1';
             event('LoginLog', $params);
-            return $this->successData($data);
+            return $this->successData($data,"登录成功");
         }
     }
 
