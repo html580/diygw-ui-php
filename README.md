@@ -43,3 +43,11 @@ DIY官网可视化工具打造低代码可视化一键生成导出源码工具�
 
 用户自定义表后，比如用户自定义的表user，你只需要在命令行输入php think diygw:table sys@User，会自动创建创建表相关Model、Controller等类。
 其中sys表示应用目录，user表示某个表。如果想看更多命令请输出php think 可以查看更多快速创建类命令。
+
+### ⚡ 部分截图
+![DIYGW可视化UNIAPP代码生成器](https://libs.diygw.com/upload/1/php0.png)
+![DIYGW可视化支持轻松在线可视化导出微信小程序代码](https://libs.diygw.com/upload/1/php1.png)
+![DIYGW可视化支持轻松在线可视化导出支付宝小程序代码](https://libs.diygw.com/upload/1/php2.png)
+![DIYGW可视化头条小程序代码生成器](https://libs.diygw.com/upload/1/php3.png)
+![DIYGW可视化H5代码生成器](https://libs.diygw.com/upload/1/php4.png)
+![DIYGW可视化Element Plus代码生成器](https://libs.diygw.com/upload/1/php5.png)

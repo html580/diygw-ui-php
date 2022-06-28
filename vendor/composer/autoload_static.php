@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitd4fcbceb422a9e6cb81c4dfdb09898e1
+class ComposerStaticInit83ff9b8dc0012bdd20bdb2b4fd1ef026
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -22,11 +22,11 @@ class ComposerStaticInitd4fcbceb422a9e6cb81c4dfdb09898e1
         '9b552a3cc426e3287cc811caefa3cf53' => __DIR__ . '/..' . '/topthink/think-helper/src/helper.php',
         '35fab96057f1bf5e7aba31a8a6d5fdde' => __DIR__ . '/..' . '/topthink/think-orm/stubs/load_stubs.php',
         'a1105708a18b76903365ca1c4aa61b02' => __DIR__ . '/..' . '/symfony/translation/Resources/functions.php',
-        'cd5441689b14144e5573bf989ee47b34' => __DIR__ . '/..' . '/qcloud/cos-sdk-v5/src/Common.php',
         '841780ea2e1d6545ea3a253239d59c05' => __DIR__ . '/..' . '/qiniu/php-sdk/src/Qiniu/functions.php',
-        'cc25fa796cd7d2989f16cf9daf45371d' => __DIR__ . '/..' . '/thans/tp-jwt-auth/src/helper.php',
+        'cd5441689b14144e5573bf989ee47b34' => __DIR__ . '/..' . '/qcloud/cos-sdk-v5/src/Common.php',
         'f0e7e63bbb278a92db02393536748c5f' => __DIR__ . '/..' . '/overtrue/wechat/src/Kernel/Support/Helpers.php',
         '6747f579ad6817f318cc3a7e7a0abb93' => __DIR__ . '/..' . '/overtrue/wechat/src/Kernel/Helpers.php',
+        'cc25fa796cd7d2989f16cf9daf45371d' => __DIR__ . '/..' . '/thans/tp-jwt-auth/src/helper.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -141,9 +141,9 @@ class ComposerStaticInitd4fcbceb422a9e6cb81c4dfdb09898e1
         ),
         'think\\' => 
         array (
-            0 => __DIR__ . '/..' . '/topthink/framework/src/think',
-            1 => __DIR__ . '/..' . '/topthink/think-helper/src',
-            2 => __DIR__ . '/..' . '/topthink/think-orm/src',
+            0 => __DIR__ . '/..' . '/topthink/think-helper/src',
+            1 => __DIR__ . '/..' . '/topthink/think-orm/src',
+            2 => __DIR__ . '/..' . '/topthink/framework/src/think',
             3 => __DIR__ . '/..' . '/topthink/think-template/src',
         ),
         'thans\\jwt\\' => 
@@ -368,11 +368,11 @@ class ComposerStaticInitd4fcbceb422a9e6cb81c4dfdb09898e1
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitd4fcbceb422a9e6cb81c4dfdb09898e1::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitd4fcbceb422a9e6cb81c4dfdb09898e1::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInitd4fcbceb422a9e6cb81c4dfdb09898e1::$prefixesPsr0;
-            $loader->fallbackDirsPsr0 = ComposerStaticInitd4fcbceb422a9e6cb81c4dfdb09898e1::$fallbackDirsPsr0;
-            $loader->classMap = ComposerStaticInitd4fcbceb422a9e6cb81c4dfdb09898e1::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit83ff9b8dc0012bdd20bdb2b4fd1ef026::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit83ff9b8dc0012bdd20bdb2b4fd1ef026::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit83ff9b8dc0012bdd20bdb2b4fd1ef026::$prefixesPsr0;
+            $loader->fallbackDirsPsr0 = ComposerStaticInit83ff9b8dc0012bdd20bdb2b4fd1ef026::$fallbackDirsPsr0;
+            $loader->classMap = ComposerStaticInit83ff9b8dc0012bdd20bdb2b4fd1ef026::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -9,7 +9,7 @@ return array(
     'think\\view\\driver\\' => array($vendorDir . '/topthink/think-view/src'),
     'think\\trace\\' => array($vendorDir . '/topthink/think-trace/src'),
     'think\\app\\' => array($vendorDir . '/topthink/think-multi-app/src'),
-    'think\\' => array($vendorDir . '/topthink/framework/src/think', $vendorDir . '/topthink/think-helper/src', $vendorDir . '/topthink/think-orm/src', $vendorDir . '/topthink/think-template/src'),
+    'think\\' => array($vendorDir . '/topthink/think-helper/src', $vendorDir . '/topthink/think-orm/src', $vendorDir . '/topthink/framework/src/think', $vendorDir . '/topthink/think-template/src'),
     'thans\\jwt\\' => array($vendorDir . '/thans/tp-jwt-auth/src'),
     'jaguarjack\\filesystem\\cloud\\' => array($vendorDir . '/jaguarjack/think-filesystem-cloud/src'),
     'itbdw\\Ip\\' => array($vendorDir . '/itbdw/ip-database/src'),

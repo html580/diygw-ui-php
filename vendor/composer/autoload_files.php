@@ -21,9 +21,9 @@ return array(
     '9b552a3cc426e3287cc811caefa3cf53' => $vendorDir . '/topthink/think-helper/src/helper.php',
     '35fab96057f1bf5e7aba31a8a6d5fdde' => $vendorDir . '/topthink/think-orm/stubs/load_stubs.php',
     'a1105708a18b76903365ca1c4aa61b02' => $vendorDir . '/symfony/translation/Resources/functions.php',
-    'cd5441689b14144e5573bf989ee47b34' => $vendorDir . '/qcloud/cos-sdk-v5/src/Common.php',
     '841780ea2e1d6545ea3a253239d59c05' => $vendorDir . '/qiniu/php-sdk/src/Qiniu/functions.php',
-    'cc25fa796cd7d2989f16cf9daf45371d' => $vendorDir . '/thans/tp-jwt-auth/src/helper.php',
+    'cd5441689b14144e5573bf989ee47b34' => $vendorDir . '/qcloud/cos-sdk-v5/src/Common.php',
     'f0e7e63bbb278a92db02393536748c5f' => $vendorDir . '/overtrue/wechat/src/Kernel/Support/Helpers.php',
     '6747f579ad6817f318cc3a7e7a0abb93' => $vendorDir . '/overtrue/wechat/src/Kernel/Helpers.php',
+    'cc25fa796cd7d2989f16cf9daf45371d' => $vendorDir . '/thans/tp-jwt-auth/src/helper.php',
 );
