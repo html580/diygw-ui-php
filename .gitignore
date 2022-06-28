@@ -3,7 +3,8 @@
 /runtime
 *.log
 .env
-config/install.lock
-public/assets
-public/index.html
-app/diy/*
+/config/install.lock
+/public/assets/
+/public/index.html
+/app/diy/
+/public/storage/

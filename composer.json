@@ -21,12 +21,13 @@
     ],
     "require": {
         "php": ">=7.2.5",
-        "topthink/framework": "^6.0.0",
-        "topthink/think-orm": "^2.0",
-        "topthink/think-multi-app": "^1.0",
+        "topthink/framework": "6.0.12",
+        "topthink/think-orm": "2.0.52",
+        "topthink/think-multi-app": "1.0.14",
         "thans/tp-jwt-auth": "^1.2",
         "itbdw/ip-database": "^3.0",
         "topthink/think-view": "^1.0",
+        "jaguarjack/think-filesystem-cloud": "^1.0",
         "overtrue/wechat": "~4.0"
     },
     "require-dev": {

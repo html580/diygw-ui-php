@@ -71,6 +71,7 @@ abstract class BaseController
     public function __construct(App $app)
     {
         $this->app     = $app;
+        $data = file_get_contents( "php://input");
         $this->request = $this->app->request;
         // 控制器初始化
         $this->initialize();
@@ -283,15 +284,17 @@ abstract class BaseController
         }
         if($this->checkData()){
             //如果对应的主要不为空，表示修改记录
-            if(isset($id)){
-                if ($this->model->edit($data)) {
-                    return $this->success('修改成功');
+            if(isset($id)&&!empty($id)){
+                $data = $this->model->edit($data);
+                if ($data) {
+                    return $this->successData($data,'修改成功');
                 } else {
                     return $this->error('修改失败');
                 }
             }else{
-                if($this->model->add($data)){
-                    return $this->success('新增成功');
+                $data = $this->model->add($data);
+                if($data){
+                    return $this->successData($data,'新增成功');
                 }else{
                     return $this->error('新增失败');
                 }
@@ -306,8 +309,9 @@ abstract class BaseController
     {
         if($this->checkData()) {
             $data = $this->request->param();
-            if ($this->model->edit($data)) {
-                return $this->success('修改成功');
+            $data = $this->model->edit($data);
+            if ($data) {
+                return $this->successData($data,'修改成功');
             } else {
                 return $this->error('修改失败');
             }
