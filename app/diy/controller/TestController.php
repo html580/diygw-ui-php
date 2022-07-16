@@ -18,6 +18,8 @@ use app\BaseController;
  */
 class TestController extends BaseController
 {
+    //是否显示所有数据
+    public $isAll = true;
     //是否初始化模型
     public $isModel = true;
     //判断是否全部不需要登录

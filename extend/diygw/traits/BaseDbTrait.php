@@ -128,14 +128,14 @@ trait BaseDbTrait
      * @throws \think\db\exception\ModelNotFoundException
      * @throws \think\db\exception\DataNotFoundException
      */
-    public function edit($data): bool
+    public function edit($data)
     {
         $pk = $this->diygwPk();
         $id = $data[Str::camel($pk)];
         if ($this->beforeEdit($data) && static::update($this->filterData($data), [$pk => $id])) {
             $this->updateChildren($id, $data);
             $this->afterEdit($data);
-            return true;
+            return $data;
         }
         return false;
     }

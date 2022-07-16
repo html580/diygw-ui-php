@@ -25,7 +25,7 @@ use think\Validate;
  */
 abstract class BaseController
 {
-    //是否初始化模型
+    //是否显示所有数据
     public $isAll = false;
     //是否初始化模型
     public $isModel = false;
