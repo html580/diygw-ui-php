@@ -44,6 +44,5 @@ return [
     'var_jsonp_handler'     => 'callback',
     'middleware' => [
         //权限认证
-        app\common\middleware\AuthTokenMiddleware::class
     ]
 ];

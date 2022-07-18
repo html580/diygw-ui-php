@@ -80,6 +80,27 @@ abstract class BaseController
     // 初始化
     protected function initialize()
     {
+        //如需要登录
+        if (!$this->isNotNeedLogin()) {
+            try {
+
+                $payload = JWTAuth::auth(); //可验证token, 并获取token中的payload部分
+
+                $this->request->userId = $payload['uid']->getValue();
+            } catch (\Exception $e) {
+                $msg = '登录过期';
+                if ($e instanceof TokenExpiredException) {
+                    $msg = '登录过期';
+                }
+                if ($e instanceof TokenBlacklistException) {
+                    $msg = '登录被加入黑名单';
+                }
+                if ($e instanceof TokenInvalidException) {
+                    $msg = '登录不合法';
+                }
+                return json(['code' => 401, 'msg' => $msg]);
+            }
+        }
         //判断是否要获取用户MODEL
         if($this->isModel){
             $root = $this->request->rootUrl();
