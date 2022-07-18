@@ -33,10 +33,10 @@ class StorageController extends BaseController
         $upload = new DiygwUpload();
         $files = $this->request->file();
         $type = $this->request->param('type');
-        if($type=='image'){
-            $datas = $upload->checkImages($files)->multiUpload($files['file']);
-        }else{
+        if($type=='file'){
             $datas = $upload->checkFiles($files)->multiUpload($files['file']);
+        }else{
+            $datas = $upload->checkImages($files)->multiUpload($files['file']);
         }
         $results = [];
         foreach ($datas as $data){
