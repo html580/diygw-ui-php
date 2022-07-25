@@ -83,9 +83,7 @@ abstract class BaseController
         //如需要登录
         if (!$this->isNotNeedLogin()) {
             try {
-
                 $payload = JWTAuth::auth(); //可验证token, 并获取token中的payload部分
-
                 $this->request->userId = $payload['uid']->getValue();
             } catch (\Exception $e) {
                 $msg = '登录过期';
@@ -98,7 +96,8 @@ abstract class BaseController
                 if ($e instanceof TokenInvalidException) {
                     $msg = '登录不合法';
                 }
-                return json(['code' => 401, 'msg' => $msg]);
+                echo json_encode(['code' => 401, 'msg' => $msg]);
+                exit();
             }
         }
         //判断是否要获取用户MODEL
@@ -346,6 +345,16 @@ abstract class BaseController
             return $this->success("删除成功");
         }else{
             return $this->error("删除失败");
+        }
+    }
+
+    public function copy(){
+        $data = $this->request->param();
+        $pageData = $this->model->copy($data);
+        if($pageData){
+            return $this->success("复制成功");
+        }else{
+            return $this->error("复制失败");
         }
     }
 
