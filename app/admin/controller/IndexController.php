@@ -23,6 +23,7 @@ class IndexController  extends BaseController
             ->whereIn('r.role_id',explode(",",$user['roleIds']))
             ->whereIn('m.menu_type',['M','C'])
             ->order("m.sort","asc")->select()->toArray();
+
         $datas = [];
         foreach ($menus as $item){
             foreach ($item as $key => $val) {

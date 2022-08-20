@@ -25,7 +25,9 @@ return [
          */
         'upload' => [
             'image' => 'fileSize:' . 1024 * 1024 * 5 . '|fileExt:jpg,png,gif,jpeg',
-            'file' => 'fileSize:' . 1024 * 1024 * 10 . '|fileExt:txt,pdf,xlsx,xls,html,mp4,mp3,amr'
+            'video' => 'fileSize:' . 1024 * 1024 * 500 . '|fileExt:rm,rmvb,wmv,avi,mpg,mpeg,mp4',
+            'mp3' => 'fileSize:' . 1024 * 1024 * 500 . '|fileExt:mp3,wma,wav,amr',
+            'file' => 'fileSize:' . 1024 * 1024 * 500 . '|fileExt:doc,docx,xls,xlsx,ppt,pptx,txt,pdf,zip,rar'
         ],
         // 更多的磁盘配置信息
         'qiniu' => [

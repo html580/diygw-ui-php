@@ -141,6 +141,20 @@ trait BaseDbTrait
     }
 
 
+    public function copy($data){
+        $pk = $this->diygwPk();
+        $id = $data['id'];
+        $data = static::where($pk, $id)->find()->toArray();
+        unset($data[Str::camel($pk)]);
+        static::save($data);
+        $pkvalue =  $this->{$this->getPk()};
+        $data[Str::camel($pk)] = $pkvalue;
+        if(isset($data['parentId'])){
+
+        }
+        return $data;
+    }
+
     /**
      *
      * @param $id

@@ -210,14 +210,22 @@ class DiygwUpload
      * @param array $files
      * @return $this
      */
-    public function checkFiles(array $files)
+    public function checkFiles($type,array $files)
     {
         try {
-            validate(['file' => config('filesystem.disks.upload.file')])->check($files);
+            //如果验证类型为空，表示图片默认图片类型
+            if(empty($type)){
+                $type = 'image';
+            }
+            $checkTypes = config('filesystem.disks.upload.'.$type);
+            if(empty($checkTypes)){
+                $checkTypes = config('filesystem.disks.upload.'.$type);
+            }
+            validate(['file' => $checkTypes])->check($files);
         } catch (ValidateException $e) {
             throw new FailedException($e->getMessage());
         }
-        $this->type = 'file';
+        $this->type = $type;
         return $this;
     }
 
