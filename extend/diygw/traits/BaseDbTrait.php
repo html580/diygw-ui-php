@@ -379,6 +379,9 @@ trait BaseDbTrait
             if (is_null($value)) {
                 unset($data[$field]);
             }
+            if(is_array($value)){
+                $data[$field] = json_encode($value);
+            }
 
             if ($field == $pk ||$field== Str::camel($pk) ) {
                 unset($data[$field]);
