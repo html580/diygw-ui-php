@@ -25,7 +25,7 @@ class StorageController extends BaseController
     //是否初始化模型
     public $isModel = true;
     //判断是否全部不需要登录
-    public $notNeedLoginAll = false;
+    public $notNeedLoginAll = true;
     //判断不需要登录的方法
     public $notNeedLogin = [];
 

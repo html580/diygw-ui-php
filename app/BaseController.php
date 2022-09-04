@@ -108,9 +108,24 @@ abstract class BaseController
             $modelClass = '\\app\\'.$root.'\\model\\' . $controller . 'Model';
             if(class_exists($modelClass)){
                 $this->model = new $modelClass();
-            }else{
-                $modelClass = '\\app\\common\\model\\' . $controller . 'Model';
-                $this->model = new $modelClass();
+            } else{
+                if(strpos($controller,'api\\')!==false){
+                    $root = ucfirst($root);
+                    $controller = str_replace("api\\","",$controller);
+                }
+                $modelClass = "\\app\\common\\model\\".$root.$controller."Model";
+                if(class_exists($modelClass)){
+                    $this->model = new $modelClass();
+                }else{
+                    $modelClass = '\\app\\common\\model\\' . $controller . 'Model';
+                    if(class_exists($modelClass)){
+                        $this->model = new $modelClass();
+                    }
+                }
+            }
+            if(!$this->model){
+                echo json_encode(['code' => 401, 'msg' => '未找到对应的模型']);
+                exit();
             }
         }
     }

@@ -15,7 +15,7 @@ namespace app\command;
 use think\console\Input;
 use think\console\Output;
 
-class DiygwTableCommand extends DiygwMakeCommand
+class DiygwTableAndApiCommand extends DiygwMakeCommand
 {
     protected $type = "Model";
 
@@ -23,8 +23,8 @@ class DiygwTableCommand extends DiygwMakeCommand
     {
         parent::configure();
         // 指令配置
-        $this->setName('diygw:table')
-            ->setDescription('创建表相关Model、Controller等类');
+        $this->setName('diygw:tableandapi')
+            ->setDescription('创建表相关Model、Controller、API等类');
     }
 
 
@@ -35,7 +35,12 @@ class DiygwTableCommand extends DiygwMakeCommand
 
     protected function getNamespace(string $app): string
     {
-        return parent::getNamespace($app) . '\\'.strtolower($this->type);
+        if($this->type=='Api'){
+            return parent::getNamespace($app) . '\\controller\\'.strtolower($this->type);
+        }else{
+            return parent::getNamespace($app) . '\\'.strtolower($this->type);
+        }
+
     }
 
     protected function getClassName(string $name): string
@@ -65,14 +70,17 @@ class DiygwTableCommand extends DiygwMakeCommand
     protected function getPathName(string $name): string
     {
         $name = substr($name, 4);
-
-        return $this->app->getBasePath() . ltrim(str_replace('\\', '/', $name), '/') .ucfirst($this->type). '.php';
+        if($this->type=='Api'){
+            return $this->app->getBasePath() . ltrim(str_replace('\\', '/', $name), '/') . 'Controller.php';
+        }else{
+            return $this->app->getBasePath() . ltrim(str_replace('\\', '/', $name), '/') .ucfirst($this->type). '.php';
+        }
 
     }
 
     protected function execute(Input $input, Output $output)
     {
-        $types = ['Controller','Model'];
+        $types = ['Controller','Model','Api'];
         foreach ($types as $type){
             $this->type = $type;
 
@@ -83,6 +91,9 @@ class DiygwTableCommand extends DiygwMakeCommand
             $pathname = $this->getPathName($classname);
 
             if (is_file($pathname)) {
+                if($this->type=='Api'){
+                    $this->type = "Controller";
+                }
                 $output->writeln('<error>' . $this->type . ':' . $classname.ucfirst($this->type) . ' already exists!</error>');
                 return false;
             }
@@ -93,6 +104,9 @@ class DiygwTableCommand extends DiygwMakeCommand
 
             file_put_contents($pathname, $this->buildClass($classname));
 
+            if($this->type=='Api'){
+                $this->type = "Controller";
+            }
             $output->writeln('<info>' . $this->type . ':' . $classname.ucfirst($this->type) . ' created successfully.</info>');
         }
 

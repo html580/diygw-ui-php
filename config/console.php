@@ -5,7 +5,8 @@
 return [
     // 指令定义
     'commands' => [
-        'diygw:table ' => 'app\command\DiygwTableCommand',
+        'diygw:table' => 'app\command\DiygwTableCommand',
+        'diygw:tableandapi' => 'app\command\DiygwTableAndApiCommand',
         'diygw:controller' => 'app\command\DiygwControllerCommand',
         'diygw:command ' => 'app\command\DiygwCommand',
         'diygw:model' => 'app\command\DiygwModelCommand',

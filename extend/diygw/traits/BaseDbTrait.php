@@ -49,9 +49,9 @@ trait BaseDbTrait
         }
         //对结果返回前进行处理
         if ($this->afterList($list)) {
-            return ['rows'  => $list['data'],'count' => $list['total']];
+            return ['rows'  => $list['data'],'total' => $list['total']];
         }else{
-            return ['rows'  => [],'count' => 0];
+            return ['rows'  => [],'total' => 0];
 
         }
     }
@@ -72,7 +72,7 @@ trait BaseDbTrait
         $list['total']= count($data);
         //对结果返回前进行处理
         if ($this->afterList($list)) {
-            return ['rows'  => $list['data'],'count' => $list['total']];
+            return ['rows'  => $list['data'],'total' => $list['total']];
         }else{
             return ['rows'  => [],'count' => 0];
 
