@@ -10,6 +10,8 @@ DIYGW-UI-PHP是一款基于thinkphp framework和 element admin开发而成的前
 
 - <a href="https://gitee.com/diygw/diygw-ui-admin" target="_blank">https://gitee.com/diygw/diygw-ui-admin</a>
 
+#### 💒 在线可视化集成教程
+- <a target="_blank" href="https://www.bilibili.com/video/BV1CP411V7TV?spm_id_from=333.999.0.0&vd_source=dc541827a3c20d8e063187146f12aa57">在线视频教程</a>
 
 ## ⚡ 功能
 - [x] `用户管理` 后台用户管理
