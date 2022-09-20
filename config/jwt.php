@@ -16,5 +16,5 @@ return [
     'token_mode'    => ['header', 'cookie', 'param'],
     //黑名单后有效期
     'blacklist_grace_period' => env('BLACKLIST_GRACE_PERIOD', 10),
-    'blacklist_storage' => thans\jwt\provider\storage\Tp5::class,
+    'blacklist_storage' => thans\jwt\provider\storage\Tp6::class,
 ];
