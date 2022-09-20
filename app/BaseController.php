@@ -104,14 +104,17 @@ abstract class BaseController
         if($this->isModel){
             $root = $this->request->rootUrl();
             $root = str_replace("/","",$root);
-            $controller = str_replace('.', '\\',$this->request->controller());
+            $root = ucfirst($root);
+//            $controller = str_replace('.', '\\',$this->request->controller());
+            $controller =  str_replace('.', '\\',$this->request->controller());
             $modelClass = '\\app\\'.$root.'\\model\\' . $controller . 'Model';
             if(class_exists($modelClass)){
                 $this->model = new $modelClass();
             } else{
                 if(strpos($controller,'api\\')!==false){
-                    $root = ucfirst($root);
-                    $controller = str_replace("api\\","",$controller);
+                    $controller = ucfirst(str_replace("api\\","",$controller));
+                }else{
+                    $controller = ucfirst($controller);
                 }
                 $modelClass = "\\app\\common\\model\\".$root.$controller."Model";
                 if(class_exists($modelClass)){
