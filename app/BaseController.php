@@ -104,13 +104,12 @@ abstract class BaseController
         if($this->isModel){
             $root = $this->request->rootUrl();
             $root = str_replace("/","",$root);
-            $root = ucfirst($root);
-//            $controller = str_replace('.', '\\',$this->request->controller());
             $controller =  str_replace('.', '\\',$this->request->controller());
             $modelClass = '\\app\\'.$root.'\\model\\' . $controller . 'Model';
             if(class_exists($modelClass)){
                 $this->model = new $modelClass();
             } else{
+                $root = ucfirst($root);
                 if(strpos($controller,'api\\')!==false){
                     $controller = ucfirst(str_replace("api\\","",$controller));
                 }else{
@@ -127,7 +126,7 @@ abstract class BaseController
                 }
             }
             if(!$this->model){
-                echo json_encode(['code' => 401, 'msg' => '未找到对应的模型']);
+                echo json_encode(['code' => 500, 'msg' => '未找到对应的模型']);
                 exit();
             }
         }
