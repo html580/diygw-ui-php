@@ -81,7 +81,7 @@ abstract class BaseController
     protected function initialize()
     {
         //如需要登录
-        if (!$this->isNotNeedLogin()) {
+        if (!$this->isNotNeedLogin()||$this->request->param("isself")=='1') {
             try {
                 $payload = JWTAuth::auth(); //可验证token, 并获取token中的payload部分
                 $this->request->userId = $payload['uid']->getValue();
@@ -319,6 +319,9 @@ abstract class BaseController
         if(isset($data[Str::camel($pk)])){
             $id = $data[Str::camel($pk)];
         }
+
+        $data['userId'] = $this->request->userId;
+
         if($this->checkData()){
             //如果对应的主要不为空，表示修改记录
             if(isset($id)&&!empty($id)){
