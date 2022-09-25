@@ -37,4 +37,16 @@ class IndexController  extends BaseController
         }
         return $this->successData($datas);
     }
+
+    public function changePassword(){
+        $user = UserModel::where('user_id',$this->request->userId)->find()->toArray();
+        $password = $this->request->post('password');
+        $newpassword = $this->request->post('newpassword');
+        if(empty($user)|| ($user && md5($password.$user['salt']) != $user['password'])){
+            return $this->error("旧密码输入错误");
+        }
+        $user['password']=md5($newpassword.$user['salt']);
+        UserModel::update($user,['user_id'=>$this->request->userId]);
+        return $this->success("修改密码成功");
+    }
 }
