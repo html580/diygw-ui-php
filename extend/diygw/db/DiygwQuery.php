@@ -148,20 +148,17 @@ class DiygwQuery extends Query
     public function quickSearch(array $likeField = []): Query
     {
         $requestParams = \request()->param();
-
         if (empty($requestParams)) {
             return $this;
         }
-
         $fields = $this->getFields();
-
         $exclueFields = ['pageNum','pageSize','page','limit'];
         foreach ($requestParams as $field => $value) {
             if (in_array($field,$exclueFields)||empty($value)){
                 continue;
             }
-
             if (isset($params[$field])) {
+
                 // ['>', value] || value
                 if (in_array($field, array_keys($fields))) {
                     if (is_array($params[$field])) {
@@ -226,6 +223,9 @@ class DiygwQuery extends Query
                         }else{
                             $this->where($tablefield, $value);
                         }
+                    }
+                    if($field=='isself' && $value=='1' && in_array('user_id',array_keys($fields))){
+                        $this->where('user_id',\request()->userId);
                     }
                 }
             }
