@@ -51,8 +51,8 @@ class DiygwTableAndApiCommand extends DiygwMakeCommand
 
         if (strpos($name, '@')) {
             [$app, $name] = explode('@', $name);
+            $name = ucfirst($app).ucfirst($name);
             if($this->type=='Model'){
-                $name = ucfirst($app).ucfirst($name);
                 $app = "common";
                 $this->module = $app."_";
             }
@@ -95,7 +95,7 @@ class DiygwTableAndApiCommand extends DiygwMakeCommand
                     $this->type = "Controller";
                 }
                 $output->writeln('<error>' . $this->type . ':' . $classname.ucfirst($this->type) . ' already exists!</error>');
-                return false;
+                continue;
             }
 
             if (!is_dir(dirname($pathname))) {

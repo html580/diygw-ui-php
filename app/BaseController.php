@@ -34,7 +34,7 @@ abstract class BaseController
     //判断不需要登录的方法
     public $notNeedLogin = [];
 
-    public $userid;
+    public $userId;
     public $model;
     /**
      * Request实例
@@ -85,6 +85,7 @@ abstract class BaseController
             try {
                 $payload = JWTAuth::auth(); //可验证token, 并获取token中的payload部分
                 $this->request->userId = $payload['uid']->getValue();
+                $this->userId = $this->request->userId;
             } catch (\Exception $e) {
                 $msg = '登录过期';
                 if ($e instanceof TokenExpiredException) {

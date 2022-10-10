@@ -120,3 +120,12 @@ function get_mysql_data($sql_path, $old_prefix = "", $new_prefix = "", $separato
     }
     return $result;
 }
+
+
+/**
+ * 生成订单号
+ */
+function getOrderNo()
+{
+    return date('YmdHis') . rand(10000000, 99999999);
+}

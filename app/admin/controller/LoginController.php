@@ -102,7 +102,6 @@ class LoginController extends BaseController
         $auth = $app->auth;
         $opendata = $auth->session($code);
         if(isset($opendata['openid'])){
-            $session_key = $opendata['session_key'];
             $openid = $opendata['openid'];
             $type = 'weixin';
             $model = new DiyUserModel();
@@ -117,12 +116,12 @@ class LoginController extends BaseController
             $data['gender'] = $userInfo['gender'];
             if($user){
                 $userId =  $user->toArray()['id'];
-                $user->save($data);
+                $data['id'] = $userId;
+                $user->edit($data);
             }else{
                 $model = new DiyUserModel();
-                $model->save($data);
-                $userId = $model->getLastInsID();
-                $data['id'] = $userId;
+                $model->add($data);
+                $userId = $data['id'];
             }
             $token = "bearer".JWTAuth::builder(['uid' => $userId]);
             $opendata['token'] = $token;

@@ -38,6 +38,7 @@ trait BaseDbTrait
             if(isset($requestParams['pageSize'])){
                 $pageSize = $requestParams['pageSize'];
             }
+
             // 分页列表
             $list =  $this->quickSearch($this->likeField)
                 ->field('*')
@@ -106,7 +107,7 @@ trait BaseDbTrait
      * @param array $data
      * @return bool
      */
-    public function add(array $data)
+    public function add(&$data)
     {
         $pk = $this->diygwPk();
         if ($this->beforeAdd($data) && $this->allowField($this->field)->save($this->filterData($data))) {
@@ -128,7 +129,7 @@ trait BaseDbTrait
      * @throws \think\db\exception\ModelNotFoundException
      * @throws \think\db\exception\DataNotFoundException
      */
-    public function edit($data)
+    public function edit(&$data)
     {
         $pk = $this->diygwPk();
         $id = $data[Str::camel($pk)];
