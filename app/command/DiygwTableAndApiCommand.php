@@ -51,7 +51,7 @@ class DiygwTableAndApiCommand extends DiygwMakeCommand
 
         if (strpos($name, '@')) {
             [$app, $name] = explode('@', $name);
-            $name = ucfirst($app).ucfirst($name);
+            $name = ucfirst($name);
             if($this->type=='Model'){
                 $app = "common";
                 $this->module = $app."_";
