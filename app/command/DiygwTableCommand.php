@@ -46,6 +46,7 @@ class DiygwTableCommand extends DiygwMakeCommand
 
         if (strpos($name, '@')) {
             [$app, $name] = explode('@', $name);
+            $name = ucfirst($name);
             if($this->type=='Model'){
                 $name = ucfirst($app).ucfirst($name);
                 $app = "common";
