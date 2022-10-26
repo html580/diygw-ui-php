@@ -1,0 +1,105 @@
+<?php
+// +----------------------------------------------------------------------
+// | Diygw PHP
+// +----------------------------------------------------------------------
+// | Copyright (c) 2022~{%year%} https://www.diygw.com All rights reserved.
+// +----------------------------------------------------------------------
+// | Author: diygw <diygwcom@diygw.com>
+// +----------------------------------------------------------------------
+declare (strict_types = 1);
+
+namespace {%namespace%};
+
+use app\BaseController;
+use think\facade\Db;
+
+/**
+ * @mixin \diygw\model\DiygwModel
+ * @package {%namespace%}
+ */
+class {%className%}Controller extends BaseController
+{
+    //是否显示所有数据
+    public $isAll = false;
+    //是否初始化模型
+    public $isModel = false;
+    //判断是否全部不需要登录
+    public $notNeedLoginAll = false;
+    //判断不需要登录的方法
+    public $notNeedLogin = [];
+
+    public function save()
+    {
+        $post = $this->request->post();
+        $data = array(
+            {%insertStr%}
+        );
+        $data['update_by'] = $this->userId;
+        $id = $post['id'] ?? 0;
+        if (empty($id)) {
+            $data['create_by'] = $this->userId;
+            $ret = Db::table('{%tableName%}')->insertGetId($data);
+            $id = $ret;
+        } else {
+            $ret = Db::table('{%tableName%}')->where('id', $id)->update($data);
+        }
+        if ($ret === false) {
+            return $this->error('保存失败');
+        }
+        return $this->successData(['id' => $id], '保存成功');
+    }
+
+    public function get()
+    {
+        $id = $this->request->get('id/d', 0);
+        $data = Db::table('{%tableName%}')->where('id', $id)->find();
+        if (empty($data)) {
+            return $this->error('记录不存在');
+        }
+        return $this->successData($data);
+    }
+
+    public function list()
+    {
+        $page = $this->request->get('page/d', 1);
+        $size = $this->request->get('size/d', 10);
+        $all = $this->request->get('all/d', 0);     //是否查询全部
+        $query = Db::table('{%tableName%}')
+            ->where('delete_time', 'null');
+        $total = $query->count();
+        $ret = [
+            'total'     => $total,
+            'list'      => [],
+        ];
+        if ($total == 0) {
+            return $this->successData($ret);
+        }
+        $query = $query->order('id', 'asc');
+        if (!$all) {
+            $start = ($page - 1) * $size;
+            $query = $query->limit($start, $size);
+        }
+        $list = $query->select()->toArray();
+        if (!$ret) {
+            return $this->successData($ret);
+        }
+        //列表处理
+
+        $ret['list'] = $list;
+        return $this->successData($ret);
+    }
+
+    public function del()
+    {
+        $id = $this->request->post('id/d', 0);
+        if (empty($id)) {
+            return $this->error('参数错误');
+        }
+        $ret = Db::table('{%tableName%}')->where('id', $id)->update(['delete_time' => date('Y-m-d H:i:s'), 'update_by' => $this->userId]);
+        if ($ret === false) {
+            return $this->error('删除失败');
+        }
+        return $this->success();
+    }
+
+}
