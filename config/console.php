@@ -12,5 +12,6 @@ return [
         'diygw:model' => 'app\command\DiygwModelCommand',
         'diygw:validate' => 'app\command\DiygwValidateCommand',
         'diygw:wechat' => 'app\command\DiygwWechatCommand',
+        'diygw:api' => 'app\command\DiygwApiCommand',
     ],
 ];
