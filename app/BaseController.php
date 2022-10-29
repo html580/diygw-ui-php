@@ -3,7 +3,9 @@ declare (strict_types = 1);
 
 namespace app;
 
-use app\log\model\LoginsModel;
+use thans\jwt\exception\TokenBlacklistException;
+use thans\jwt\exception\TokenExpiredException;
+use thans\jwt\exception\TokenInvalidException;
 use thans\jwt\facade\JWTAuth;
 use think\App;
 use think\exception\HttpResponseException;
@@ -12,12 +14,6 @@ use think\facade\View;
 use think\helper\Str;
 use think\Response;
 use think\response\Json;
-use thans\jwt\exception\TokenBlacklistException;
-use thans\jwt\exception\TokenExpiredException;
-use thans\jwt\exception\TokenInvalidException;
-
-use diygw\AjaxResult;
-use diygw\HttpStatus;
 use think\Validate;
 
 /**
@@ -225,7 +221,19 @@ abstract class BaseController
         return json($data, 200);
     }
 
-
+    /**
+     * @notes 接口分页操作成功，返回信息
+     * @param int $code
+     * @param string $msg
+     * @param array $data
+     * @return Json
+     */
+    public function pageData(array $data = [], int $code = 200, string $msg = 'success'): Json
+    {
+        $data['code'] = $code;
+        $data['msg'] = $msg;
+        return json($data, 200);
+    }
 
     /**
      * @notes 接口返回信息
@@ -291,7 +299,7 @@ abstract class BaseController
     public function list()
     {
         $pageData = $this->model->getList();
-        return $this->successData($pageData);
+        return $this->pageData($pageData);
     }
 
 
@@ -368,6 +376,7 @@ abstract class BaseController
             return $this->error("删除失败");
         }
     }
+
 
     public function copy(){
         $data = $this->request->param();
