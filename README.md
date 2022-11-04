@@ -53,3 +53,30 @@ DIY官网可视化工具打造低代码可视化一键生成导出源码工具�
 ![DIYGW可视化头条小程序代码生成器](https://libs.diygw.com/upload/1/php3.png)
 ![DIYGW可视化H5代码生成器](https://libs.diygw.com/upload/1/php4.png)
 ![DIYGW可视化Element Plus代码生成器](https://libs.diygw.com/upload/1/php5.png)
+
+## ⚡ 发布网站
+
+1、生成diygw-ui-admin项目的代码，执行命令前修改开发.env.production 下的域名配置为你的域名
+yarn build
+生成完成后 找到dist目录下所有文件拷贝到diygw-ui-php项目下面
+
+2、宝塔创建网站 ---对应域名 域名解析至这个网站 	  
+记住创建的数据库用户名密码
+
+
+3、上传代码把我们开发的PHP代码上传进去并解压出来
+网站目录：
+防跨站攻击(open_basedir)把勾去掉
+修改宝塔网站的根目录指向解压文件的public目录下/www/wwwroot/你的域名/diygw-ui-php/public
+伪静态设置：
+设置为thinkphp伪静态
+SSL证书配置：
+设置其他证书
+
+
+4、修改数据库：
+/www/wwwroot/你的域名/diygw-ui-php/.env文件修改为正式环境的数据库用户名密码
+先从本地导出数据，然后在宝塔上管理数据库导入数据库
+
+
+5、访问  你的域名/index.html		输入用户名密码即可访问 
