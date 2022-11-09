@@ -409,7 +409,7 @@ abstract class BaseController
     public function all(){
         if($this->isAll){
             $pageData = $this->model->getAllList();
-            return $this->successData($pageData);
+            return $this->pageData($pageData);
         }else{
             return $this->error('不允许返回所有数据');
         }
