@@ -152,9 +152,9 @@ class DiygwQuery extends Query
             return $this;
         }
         $fields = $this->getFields();
-        $exclueFields = ['pageNum','pageSize','page','limit'];
+        $exclueFields = ['pageNum','pageSize','page','limit','orderby'];
         foreach ($requestParams as $field => $value) {
-            if (in_array($field,$exclueFields)||empty($value)){
+            if (in_array($field,$exclueFields) ||empty($value) || $value=='undefined'){
                 continue;
             }
             if (isset($params[$field])) {
@@ -174,14 +174,15 @@ class DiygwQuery extends Query
                 if (Str::endsWith($field,$endField)) {
                     $field = Str::snake(Str::substr($field,0,Str::length($field) - Str::length($endField)));
                     if (in_array($field, array_keys($fields))) {
-                        $this->where($field, '>=', strtotime($value));
+                        $this->where($field, '>=', $value);
+                        continue;
                     }
                 }
                 $endField = "_end";
                 if (Str::endsWith($field,$endField)) {
                     $field = Str::snake(Str::substr($field,0,Str::length($field) - Str::length($endField)));
                     if (in_array($field, array_keys($fields))) {
-                        $this->where($field, '<=', strtotime($value));
+                        $this->where($field, '<=', $value);
                         continue;
                     }
                 }
@@ -336,16 +337,28 @@ class DiygwQuery extends Query
      */
     public function diygwOrder(string $order = 'desc'): DiygwQuery
     {
-        $fields = $this->getFields();
-        if (in_array('sort', array_keys($fields))) {
-            $this->order($this->getTable() . '.sort asc');
+        $requestParams = \request()->param();
+        //如果前台有传入排序字段
+        if(isset($requestParams['orderby'])){
+            if($requestParams['orderby'] =='rand'){
+                $this->orderRand();
+            }else{
+                $this->order($requestParams['orderby']);
+            }
+        }else{
+            $fields = $this->getFields();
+
+            if (in_array('sort', array_keys($fields))) {
+                $this->order($this->getTable() . '.sort asc');
+            }
+
+            if (in_array('weight', array_keys($fields))) {
+                $this->order($this->getTable() . '.weight', $order);
+            }
+
+            $this->order($this->getTable() . '.' . $this->getPk(), $order);
         }
 
-        if (in_array('weight', array_keys($fields))) {
-            $this->order($this->getTable() . '.weight', $order);
-        }
-
-        $this->order($this->getTable() . '.' . $this->getPk(), $order);
 
         return $this;
     }
