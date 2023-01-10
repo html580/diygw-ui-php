@@ -8,6 +8,7 @@ use thans\jwt\exception\TokenExpiredException;
 use thans\jwt\exception\TokenInvalidException;
 use thans\jwt\facade\JWTAuth;
 use think\App;
+use think\Exception;
 use think\exception\HttpResponseException;
 use think\exception\ValidateException;
 use think\facade\View;
@@ -322,32 +323,36 @@ abstract class BaseController
      */
     public function add()
     {
-        $data = $this->request->param();
-        $pk = $this->model->diygwPk();
+        try {
+            $data = $this->request->param();
+            $pk = $this->model->diygwPk();
 
-        if(isset($data[Str::camel($pk)])){
-            $id = $data[Str::camel($pk)];
-        }
+            if(isset($data[Str::camel($pk)])){
+                $id = $data[Str::camel($pk)];
+            }
 
-        $data['userId'] = $this->request->userId;
+            $data['userId'] = $this->request->userId;
 
-        if($this->checkData()){
-            //如果对应的主要不为空，表示修改记录
-            if(isset($id)&&!empty($id)){
-                $data = $this->model->edit($data);
-                if ($data) {
-                    return $this->successData($data,'修改成功');
-                } else {
-                    return $this->error('修改失败');
-                }
-            }else{
-                $data = $this->model->add($data);
-                if($data){
-                    return $this->successData($data,'新增成功');
+            if($this->checkData()){
+                //如果对应的主要不为空，表示修改记录
+                if(isset($id)&&!empty($id)){
+                    $data = $this->model->edit($data);
+                    if ($data) {
+                        return $this->successData($data,'修改成功');
+                    } else {
+                        return $this->error('修改失败');
+                    }
                 }else{
-                    return $this->error('新增失败');
+                    $data = $this->model->add($data);
+                    if($data){
+                        return $this->successData($data,'新增成功');
+                    }else{
+                        return $this->error('新增失败');
+                    }
                 }
             }
+        }catch (Exception $exception){
+            return $this->error($exception->getMessage());
         }
     }
 
@@ -356,35 +361,47 @@ abstract class BaseController
      */
     public function update()
     {
-        if($this->checkData()) {
-            $data = $this->request->param();
-            $data = $this->model->edit($data);
-            if ($data) {
-                return $this->successData($data,'修改成功');
-            } else {
-                return $this->error('修改失败');
+        try {
+            if($this->checkData()) {
+                $data = $this->request->param();
+                $data = $this->model->edit($data);
+                if ($data) {
+                    return $this->successData($data,'修改成功');
+                } else {
+                    return $this->error('修改失败');
+                }
             }
+        }catch (Exception $exception){
+            return $this->error($exception->getMessage());
         }
     }
 
     public function del(){
-        $data = $this->request->param();
-        $pageData = $this->model->del($data,false);
-        if($pageData){
-            return $this->success("删除成功");
-        }else{
-            return $this->error("删除失败");
+        try {
+            $data = $this->request->param();
+            $pageData = $this->model->del($data,false);
+            if($pageData){
+                return $this->success("删除成功");
+            }else{
+                return $this->error("删除失败");
+            }
+        }catch (Exception $exception){
+            return $this->error($exception->getMessage());
         }
     }
 
 
     public function copy(){
-        $data = $this->request->param();
-        $pageData = $this->model->copy($data);
-        if($pageData){
-            return $this->success("复制成功");
-        }else{
-            return $this->error("复制失败");
+        try {
+            $data = $this->request->param();
+            $pageData = $this->model->copy($data);
+            if($pageData){
+                return $this->success("复制成功");
+            }else{
+                return $this->error("复制失败");
+            }
+        }catch (Exception $exception){
+            return $this->error($exception->getMessage());
         }
     }
 
@@ -393,12 +410,16 @@ abstract class BaseController
      */
     public function get()
     {
-        $data = $this->request->param();
-        $data = $this->model->get($data);
-        if($data){
-            return $this->successData($data);
-        }else{
-            return $this->error('获取数据失败');
+        try {
+            $data = $this->request->param();
+            $data = $this->model->get($data);
+            if($data){
+                return $this->successData($data);
+            }else{
+                return $this->error('获取数据失败');
+            }
+        }catch (Exception $exception){
+            return $this->error($exception->getMessage());
         }
     }
 
