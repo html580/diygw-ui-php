@@ -154,8 +154,10 @@ class DiygwQuery extends Query
         $fields = $this->getFields();
         $exclueFields = ['pageNum','pageSize','page','limit','orderby'];
         foreach ($requestParams as $field => $value) {
-            if (in_array($field,$exclueFields) || !(isset($value)&&!empty($value)) || $value=='undefined'){
-                continue;
+            if (in_array($field,$exclueFields) || empty($value)  || $value=='undefined'){
+                if(!is_numeric($value)){
+                    continue;
+                }
             }
             if (isset($params[$field])) {
 
