@@ -2,13 +2,12 @@
 
 return [
     // 默认磁盘
-    'default' => env('filesystem.driver', 'local'),
+    'default' => 'local',
     // 磁盘列表
     'disks'   => [
         'local'  => [
             'type' => 'local',
             'root' => app()->getRootPath() . 'public/storage',
-            'domain' => ''
         ],
         'public' => [
             // 磁盘类型
@@ -31,37 +30,24 @@ return [
         ],
         // 更多的磁盘配置信息
         'qiniu' => [
-            'type'       => 'qiniu',
+            'bucket' => '',
             'access_key' => '',
             'secret_key' => '',
-            'bucket'     => '',
-            'protocol'   => '',
-            'domain'     => '',
+            'domain' => 'http://'
         ],
-        'oss' => [
-            'type'   => 'oss',
-            'prefix' => '',
-            'access_key' => '',
-            'secret_key' => '',
-            'end_point'  => '', // ssl：https://iidestiny.com
-            'bucket'     => '',
-            'is_cname'   =>  false
+        'aliyun' => [
+            'bucket' => '',
+            'access_key_id' => '',
+            'access_key_secret' => '',
+            'domain' => 'http://'
         ],
         // 腾讯云配置
         'qcloud' => [
-            'type'        => 'qcloud',
-            'region'      => '',
-            'credentials' => [
-                'appId'      => '', // 域名中数字部分
-                'secretId'   => '',
-                'secretKey'  => '',
-            ],
-            'bucket'          => '',
-            'timeout'         => 60,
-            'connect_timeout' => 60,
-            'cdn'             => '',
-            'scheme'          => 'https',
-            'read_from_cdn'   => false,
+            'bucket' => '',
+            'region' => '',
+            'secret_id' => '',
+            'secret_key' => '',
+            'domain' => 'http://'
         ]
     ],
 ];

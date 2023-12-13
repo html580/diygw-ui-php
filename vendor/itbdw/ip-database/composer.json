@@ -26,10 +26,7 @@
     }
   ],
   "require": {
-    "php": "~5.4|~7.0",
-    "ext-mbstring": "*",
-    "ext-json": "*",
-    "ext-iconv": "*"
+    "php": ">=5.3.3"
   },
   "autoload": {
     "psr-4": {

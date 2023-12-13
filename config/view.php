@@ -22,10 +22,4 @@ return [
     'taglib_begin'  => '{',
     // 标签库标签结束标记
     'taglib_end'    => '}',
-    // 模板常量
-    'tpl_replace_string' => [
-        '__PUBLIC__' => request()->root(),// 兼容localhost
-        '__STATIC__' => request()->root()."/static",// 兼容localhost
-        '__PLUGIN__' => request()->root()."/plugins",// 兼容localhost
-    ]
 ];

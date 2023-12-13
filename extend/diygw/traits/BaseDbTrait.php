@@ -8,9 +8,19 @@ use think\helper\Str;
 
 trait BaseDbTrait
 {
+    //查询相似字段时，要同时查询多个字段['title|remark']表示查询title或者remark相等的字段
     protected $likeField=[];
+    //数据查询字段 用JSON查询
+    protected $arrayField=[];
+
+    protected $showField = "*";
 
     protected $paginate = true;
+
+    //是否数据权限查询
+    protected $isdataright = false;
+
+    protected $isdatadeptright = false;
 
     public function afterList(&$list){
         return true;
@@ -24,29 +34,30 @@ trait BaseDbTrait
      */
     public function getList()
     {
+        $field= $this->showField;
         // 不分页
         if (property_exists($this, 'paginate') && $this->paginate === false) {
-            $data =   $this->quickSearch($this->likeField)
-                ->field('*')
+            $data =   $this->quickSearch($this->likeField,$this->arrayField,$this->isdataright,$this->isdatadeptright)
+                ->field($field)
                 ->diygwOrder()
                 ->select()->toArray();
             $list['data']= $data;
             $list['total']= count($data);
         }else{
-            $requestParams = \request()->param();
             $pageSize = 10;
+            $requestParams = \request()->param();
             if(isset($requestParams['pageSize'])){
                 $pageSize = $requestParams['pageSize'];
             }
-
             // 分页列表
-            $list =  $this->quickSearch($this->likeField)
-                ->field('*')
+            $list =  $this->quickSearch($this->likeField,$this->arrayField,$this->isdataright,$this->isdatadeptright)
+                ->field($field)
                 ->diygwOrder()
                 ->paginate([
                     'list_rows'=> $pageSize,
                     'var_page' => 'pageNum',
                 ])->toArray();
+
         }
         //对结果返回前进行处理
         if ($this->afterList($list)) {
@@ -65,8 +76,9 @@ trait BaseDbTrait
      */
     public function getAllList()
     {
+        $field= $this->showField;
         $data =   $this->quickSearch()
-            ->field('*')
+            ->field($field)
             ->diygwOrder()
             ->select()->toArray();
         $list['data']= $data;
@@ -76,13 +88,12 @@ trait BaseDbTrait
             return ['rows'  => $list['data'],'total' => $list['total']];
         }else{
             return ['rows'  => [],'count' => 0];
-
         }
     }
 
-    public function getPk(){
-        return $this->diygwPk();
-    }
+//    public function getPk(){
+//        return  $this->pk;
+//    }
 
 
     public function beforeAdd(&$data){
@@ -102,6 +113,14 @@ trait BaseDbTrait
         return true;
     }
 
+    public function beforeDel(&$data){
+        return true;
+    }
+
+    public function afterDel(&$data){
+        return true;
+    }
+
     /**
      *
      * @param array $data
@@ -109,12 +128,20 @@ trait BaseDbTrait
      */
     public function add(&$data)
     {
-        $pk = $this->diygwPk();
-        if ($this->beforeAdd($data) && $this->allowField($this->field)->save($this->filterData($data))) {
-            $pkvalue =  $this->{$this->getPk()};
-            $data[Str::camel($pk)] = $pkvalue;
-            $this->afterAdd($data);
-            return  $data;
+        try {
+            $this->startTrans();
+            $pk =  $this->pk;
+            if ($this->beforeAdd($data) && $this->allowField($this->field)->save($this->filterData($data))) {
+                $pkvalue =  $this->getLastInsID();
+                $data[Str::camel($pk)] = $pkvalue;
+                $this->afterAdd($data);
+                $this->commit();
+                return $data;
+            }
+        }catch (\Exception $e) {
+            $this->error = $e->getMessage();
+            $this->rollback();
+            return false;
         }
         return false;
     }
@@ -131,24 +158,32 @@ trait BaseDbTrait
      */
     public function edit(&$data)
     {
-        $pk = $this->diygwPk();
-        $id = $data[Str::camel($pk)];
-        if ($this->beforeEdit($data) && static::update($this->filterData($data), [$pk => $id])) {
-            $this->updateChildren($id, $data);
-            $this->afterEdit($data);
-            return $data;
+        try {
+            $this->startTrans();
+            $pk =  $this->pk;
+            $id = $data[Str::camel($pk)];
+            if ($this->beforeEdit($data) && static::update($this->filterData($data), [$pk => $id])) {
+                $this->updateChildren($id, $data);
+                $this->afterEdit($data);
+                $this->commit();
+                return $data;
+            }
+        }catch (\Exception $e) {
+            $this->error = $e->getMessage();
+            $this->rollback();
+            return false;
         }
         return false;
     }
 
 
     public function copy($data){
-        $pk = $this->diygwPk();
+        $pk =  $this->pk;
         $id = $data['id'];
         $data = static::where($pk, $id)->find()->toArray();
         unset($data[Str::camel($pk)]);
         static::save($data);
-        $pkvalue =  $this->{$this->getPk()};
+        $pkvalue = $this->getLastInsID();
         $data[Str::camel($pk)] = $pkvalue;
         if(isset($data['parentId'])){
 
@@ -164,7 +199,15 @@ trait BaseDbTrait
      */
     public function del($id, bool $force = false)
     {
-        return static::destroy(is_array($id['id']) ? $id['id'] : Utils::stringToArrayBy($id['id']), $force);
+        $ids = is_array($id['id']) ? $id['id'] : Utils::stringToArrayBy($id['id']);
+        if ($this->beforeDel($ids) ) {
+            return static::destroy($ids, $force);
+        }else{
+            if(empty($this->error)){
+                $this->error = "删除失败";
+            }
+            return  false;
+        }
     }
 
 
@@ -186,7 +229,8 @@ trait BaseDbTrait
     }
 
     public function get($id){
-        $data = static::where($this->getPk(), $id['id'])->find();
+        $pk =  $this->pk;
+        $data = static::where($pk, $id['id'])->find();
         if($data){
             return $this->afterGet($data->toArray());
         }else{
@@ -248,15 +292,15 @@ trait BaseDbTrait
         return static::onlyTrashed()->find($id)->restore();
     }
 
-  /**
-   * 获取删除字段
-   *
-   * @time 2022年03月18日
-   * @return mixed
-   */
+    /**
+     * 获取删除字段
+     *
+     * @time 2022年03月18日
+     * @return mixed
+     */
     public function getDeleteAtField()
     {
-      return $this->deleteTime;
+        return $this->deleteTime;
     }
 
     /**
@@ -320,14 +364,14 @@ trait BaseDbTrait
         }
     }
 
-  /**
-   * 别名
-   *
-   * @time 2022年03月18日
-   * @param $field
-   * @param string $table
-   * @return array|string
-   */
+    /**
+     * 别名
+     *
+     * @time 2022年03月18日
+     * @param $field
+     * @param string $table
+     * @return array|string
+     */
     public function aliasField($field, $table = '')
     {
         $table = $table ? Utils::tableWithPrefix($table) : $this->getTable();
@@ -373,22 +417,27 @@ trait BaseDbTrait
      * @param array $data
      * @return mixed
      */
-    protected function filterData(array $data)
+    public function filterData(array $data)
     {
         $pk = $this->getPk();
         foreach ($data as $field => $value) {
-            if (is_null($value)) {
-                unset($data[$field]);
+            if ((is_null($value))||$value=='null'||$value=='undefined') {
+                if($value!='0'){
+                    unset($data[$field]);
+                }
             }
             if(is_array($value)){
-                $data[$field] = json_encode($value);
+                $data[$field] = json_encode($value,JSON_UNESCAPED_UNICODE);
             }
 
             if ($field == $pk ||$field== Str::camel($pk) ) {
                 unset($data[$field]);
             }
-
-            if (in_array($field, [$this->createTime, $this->updateTime, $this->deleteTime,Str::camel($this->createTime), Str::camel($this->updateTime), Str::camel($this->deleteTime)])) {
+            $excludeTimeField =  [$this->createTime, $this->updateTime, $this->deleteTime,Str::camel($this->createTime), Str::camel($this->updateTime)];
+            if($this->deleteTime){
+                $excludeTimeField[] = Str::camel($this->deleteTime);
+            }
+            if (in_array($field, $excludeTimeField)) {
                 unset($data[$field]);
             }
         }

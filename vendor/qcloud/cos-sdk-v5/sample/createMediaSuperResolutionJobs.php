@@ -1,6 +1,6 @@
 <?php
 
-require dirname(__FILE__) . '/../vendor/autoload.php';
+require dirname(__FILE__, 2) . '/vendor/autoload.php';
 
 $secretId = "SECRETID"; //替换为用户的 secretId，请登录访问管理控制台进行查看和管理，https://console.cloud.tencent.com/cam/capi
 $secretKey = "SECRETKEY"; //替换为用户的 secretKey，请登录访问管理控制台进行查看和管理，https://console.cloud.tencent.com/cam/capi
@@ -8,9 +8,9 @@ $region = "ap-beijing"; //替换为用户的 region，已创建桶归属的regio
 $cosClient = new Qcloud\Cos\Client(
     array(
         'region' => $region,
-        'schema' => 'https', //协议头部，默认为http
+        'scheme' => 'https', //协议头部，默认为http
         'credentials'=> array(
-            'secretId'  => $secretId ,
+            'secretId'  => $secretId,
             'secretKey' => $secretKey)));
 try {
     // 提交超分辨率任务 https://cloud.tencent.com/document/product/436/67210
@@ -18,7 +18,6 @@ try {
     $result = $cosClient->createMediaSuperResolutionJobs(array(
         'Bucket' => 'examplebucket-125000000', //存储桶名称，由BucketName-Appid 组成，可以在COS控制台查看 https://console.cloud.tencent.com/cos5/bucket
         'Tag' => 'SuperResolution',
-        'QueueId' => 'p81e648af2aee49688570xxxxxxxxxxx',
         'Input' => array(
             'Object' => 'video01.mp4'
         ),
@@ -37,6 +36,8 @@ try {
                 'Bucket' => 'examplebucket-125000000', //存储桶名称，由BucketName-Appid 组成，可以在COS控制台查看 https://console.cloud.tencent.com/cos5/bucket
                 'Object' => 'SuperResolution.flv',
             ),
+//            'UserData' => 'xxx', // 透传用户信息
+//            'JobLevel' => '0', // 任务优先级，级别限制：0 、1 、2。级别越大任务优先级越高，默认为0
         ),
         'CallBack' => '',
     ));
@@ -48,7 +49,6 @@ try {
     $result = $cosClient->createMediaSuperResolutionJobs(array(
         'Bucket' => 'examplebucket-125000000', //存储桶名称，由BucketName-Appid 组成，可以在COS控制台查看 https://console.cloud.tencent.com/cos5/bucket
         'Tag' => 'SuperResolution',
-        'QueueId' => 'p81e648af2aee49688570xxxxxxxxxxx',
         'Input' => array(
             'Object' => 'video01.mp4'
         ),
@@ -145,6 +145,8 @@ try {
                 'Bucket' => 'examplebucket-125000000', //存储桶名称，由BucketName-Appid 组成，可以在COS控制台查看 https://console.cloud.tencent.com/cos5/bucket
                 'Object' => 'SuperResolution.flv',
             ),
+//            'UserData' => 'xxx', // 透传用户信息
+//            'JobLevel' => '0', // 任务优先级，级别限制：0 、1 、2。级别越大任务优先级越高，默认为0
         ),
         'CallBack' => '',
     ));

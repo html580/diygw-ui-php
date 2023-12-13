@@ -8,15 +8,17 @@
 
 ## 环境要求
 
-1. php ^7.0 || ^8.0
-2. thinkphp ^5.1.10 || ^6.0.0
+1. php ~8.1.0 || ~8.2.0
+2. thinkphp ^5.1.10 || ^6.0.0 || ^8.0.0
+
+> 2.x 要求 PHP 8.1 以上，8.0及以下请使用1.x
 
 ## 说明
 > 目前支持如下三大类型加密方式：RSA,HASH,DSA。再各分256、384、512位。
 默认是HS256，即hash 256位加密。
 
 >需要修改加密方式，请修改参数：ALGO，参数选项：
-* HS256    
+* HS256
     > 备注：hash 256位
 * HS384
     > 备注：hash 384位
@@ -36,10 +38,8 @@
     > 备注：dsa 512位
 
 > 重要：RSA和DSA 都是非对称加密方式，除了修改参数ALGO外，需要配置：PUBLIC_KEY、PRIVATE_KEY两个参数，
-> 这两个参数支持文本（不要开头、结尾和换行）或密钥文件路径。如果密钥设置了密码，请配置好参数：PASSWORD
+> 这两个参数**只支持**密钥文件路径。如果密钥设置了密码，请配置好参数：PASSWORD
 
-> env文件不支持内容有等于号，遇到这种情况：
->1、使用路径 2、生成没有等于号的密钥。
 ## 安装
 
 第一步:
@@ -47,6 +47,7 @@
 ```shell
 $ composer require thans/tp-jwt-auth
 ```
+
 
 第二步:
 
@@ -78,7 +79,7 @@ JWTAuth::refresh();//刷新token，会将旧token加入黑名单
 $tokenStr = JWTAuth::token()->get(); //可以获取请求中的完整token字符串
 
 $payload = JWTAuth::auth(); //可验证token, 并获取token中的payload部分
-$uid = $payload['uid']->getValue(); //可以继而获取payload里自定义的字段，比如uid
+$uid = $payload['uid']; //可以继而获取payload里自定义的字段，比如uid
 
 ```
 token刷新说明：
@@ -109,13 +110,11 @@ token传参方式如下：
 #### 常见问题
 - 使用RSA256方式的时候，请使用文本形式。如下：
 
-![image](https://thans.cn/Snipaste_2020-01-18_17-25-52.png)
-
 ## 联系&打赏
 
 [打赏名单](SUPPORT.md)
 
-![image](https://thans.cn/others/thans.jpeg)
+![image](https://img.thans.cn/wechat.jpg)
 
 ## 参考与借鉴
 

@@ -13,7 +13,6 @@ namespace {%namespace%};
 use app\BaseController;
 
 /**
- * @mixin \diygw\model\DiygwModel
  * @package {%namespace%}
  */
 class {%className%}Controller extends BaseController

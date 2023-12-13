@@ -4,15 +4,13 @@ declare(strict_types=1);
 namespace diygw\model;
 
 use diygw\db\DiygwQuery;
+use diygw\db\TestQuery;
 use diygw\traits\BaseDbTrait;
 use think\model\concern\SoftDelete;
 
 
 /**
- *
- * @mixin DiygwQuery
  * Class DiygwModel
- * @package diygw\model
  */
 abstract class DiygwModel extends \think\Model
 {
@@ -32,14 +30,12 @@ abstract class DiygwModel extends \think\Model
     // 禁用
     public const DISABLE = 2;
 
-//    public function __construct(array $data = [])
-//    {
-//        parent::__construct($data);
-//
-//        if(empty($this->pk)){
-//            $this->pk = $this->diygwPk();
-//        }
-//    }
+    public function __construct(array $data = [])
+    {
+        parent::__construct($data);
 
-
+        if(empty($this->pk)){
+            $this->pk = $this->diygwPk();
+        }
+    }
 }

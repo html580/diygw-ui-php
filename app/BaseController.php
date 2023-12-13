@@ -17,6 +17,7 @@ use think\Response;
 use think\response\Json;
 use think\Validate;
 
+
 /**
  * 控制器基础类
  */
@@ -29,10 +30,13 @@ abstract class BaseController
     //判断是否全部不需要登录
     public $notNeedLoginAll = false;
     //判断不需要登录的方法
-    public $notNeedLogin = [];
+    public $notNeedLogin = ['test'];
+    //默认登录用户id
+    public $tokenKey = 'uid';
 
     public $userId;
     public $model;
+
     /**
      * Request实例
      * @var \think\Request
@@ -57,9 +61,6 @@ abstract class BaseController
      */
     protected $middleware = [];
 
-    public function getUserId(){
-
-    }
     /**
      * 构造方法
      * @access public
@@ -68,7 +69,6 @@ abstract class BaseController
     public function __construct(App $app)
     {
         $this->app     = $app;
-        $data = file_get_contents( "php://input");
         $this->request = $this->app->request;
         // 控制器初始化
         $this->initialize();
@@ -81,7 +81,7 @@ abstract class BaseController
         if (!$this->isNotNeedLogin()||$this->request->param("isself")=='1') {
             try {
                 $payload = JWTAuth::auth(); //可验证token, 并获取token中的payload部分
-                $this->request->userId = $payload['uid']->getValue();
+                $this->request->userId = $payload[$this->tokenKey];
                 $this->userId = $this->request->userId;
             } catch (\Exception $e) {
                 $msg = '登录过期';
@@ -113,11 +113,11 @@ abstract class BaseController
                 }else{
                     $controller = ucfirst($controller);
                 }
-                $modelClass = "\\app\\common\\model\\".$root.$controller."Model";
+                $modelClass = '\\app\\'.$root.'\\model\\' . $controller . 'Model';
                 if(class_exists($modelClass)){
                     $this->model = new $modelClass();
                 }else{
-                    $modelClass = '\\app\\common\\model\\' . $controller . 'Model';
+                    $modelClass = "\\app\\common\\model\\".$root.$controller."Model";
                     if(class_exists($modelClass)){
                         $this->model = new $modelClass();
                     }
@@ -140,7 +140,7 @@ abstract class BaseController
      * @return array|string|true
      * @throws ValidateException
      */
-    protected function validate(array $data, $validate, array $message = [], bool $batch = false)
+    protected function validate(array $data, string|array $validate, array $message = [], bool $batch = false)
     {
         if (is_array($validate)) {
             $v = new Validate();
@@ -166,6 +166,7 @@ abstract class BaseController
 
         return $v->failException(true)->check($data);
     }
+
 
     public function success( string $msg = 'success'): Json{
         return $this->result([],200,$msg);
@@ -244,7 +245,7 @@ abstract class BaseController
      * @param int $httpStatus
      * @return Json
      */
-    public  function result( array $data = [], int $code, string $msg = 'OK',int $httpStatus = 200): Json
+    public  function result( array $data = [], int $code=200, string $msg = 'OK',int $httpStatus = 200): Json
     {
         if(count($data)==0){
             $result = compact('code', 'msg');
@@ -464,5 +465,4 @@ abstract class BaseController
     {
         View::assign($name,$value);
     }
-
 }

@@ -14,6 +14,9 @@ class IndexController  extends BaseController
         return $this->fetch();
     }
 
+    public function test(){
+       return $this->successData(Db::table('cms_article')->select()->toArray());
+    }
     public function getMenuAdmin(){
         $user = UserModel::where('user_id',$this->request->userId)->find()->toArray();
         $menus  = Db::table('sys_menu')

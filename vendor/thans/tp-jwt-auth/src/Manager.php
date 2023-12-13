@@ -8,6 +8,8 @@ use thans\jwt\provider\JWT\Provider;
 
 class Manager
 {
+    protected $provider;
+
     protected $blacklist;
 
     protected $payload;
@@ -22,8 +24,8 @@ class Manager
         Provider $provider
     ) {
         $this->blacklist = $blacklist;
-        $this->payload   = $payload;
-        $this->provider  = $provider;
+        $this->payload = $payload;
+        $this->provider = $provider;
     }
 
     /**
@@ -36,7 +38,7 @@ class Manager
     public function encode($customerClaim = [])
     {
         $payload = $this->payload->customer($customerClaim);
-        $token   = $this->provider->encode($payload->get());
+        $token = $this->provider->encode($payload->get());
 
         return new Token($token);
     }
@@ -52,8 +54,6 @@ class Manager
     public function decode(Token $token)
     {
         $payload = $this->provider->decode($token->get());
-
-
         if ($this->validate) {
             //blacklist grace period verify
             if ($this->validateGracePeriod($payload)) {
@@ -82,6 +82,7 @@ class Manager
     public function refresh(Token $token)
     {
         $this->setRefresh();
+
         $payload = $this->decode($token);
 
         $this->invalidate($token);

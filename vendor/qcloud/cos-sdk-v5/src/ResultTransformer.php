@@ -18,7 +18,7 @@ class ResultTransformer {
 
     public function writeDataToLocal(CommandInterface $command, RequestInterface $request, ResponseInterface $response) {
         $action = $command->getName();
-        if ($action == "GetObject" || $action == "GetSnapshot") {
+        if ($action == "GetObject" || $action == "GetSnapshot" || $action == "ImageRepairProcess") {
             if (isset($command['SaveAs'])) {
                 $fp = fopen($command['SaveAs'], "wb");
                 $stream = $response->getBody();
@@ -56,7 +56,10 @@ class ResultTransformer {
         if ($command['Bucket'] != null && $result['Bucket'] == null) {
             $result['Bucket'] = $command['Bucket'];
         }
-        $result['Location'] = $request->getHeader("Host")[0] .  $request->getUri()->getPath();
+        $result['Location'] = $request->getHeader('Host')[0] .  $request->getUri()->getPath();
+        if ($this->config['locationWithScheme']) {
+            $result['Location'] = $this->config['scheme'] . '://' . $result['Location'];
+        }
         return $result;
     }
 
@@ -94,13 +97,57 @@ class ResultTransformer {
             }
         }
 
-        if ($action == "GetBucketGuetzli" ) {
+        if ($action == "GetBucketGuetzli") {
             $length = intval($result['ContentLength']);
             if($length > 0){
                 $content = $this->geCiContentInfo($result, $length);
                 $obj = simplexml_load_string($content, "SimpleXMLElement", LIBXML_NOCDATA);
                 $arr = json_decode(json_encode($obj),true);
                 $result['GuetzliStatus'] = isset($arr[0]) ? $arr[0] : '';
+            }
+        }
+
+        if ($action == "GetCiService") {
+            $length = intval($result['ContentLength']);
+            if($length > 0){
+                $content = $this->geCiContentInfo($result, $length);
+                $obj = simplexml_load_string($content, "SimpleXMLElement", LIBXML_NOCDATA);
+                $arr = json_decode(json_encode($obj),true);
+                $result['CIStatus'] = isset($arr[0]) ? $arr[0] : '';
+                unset($result['Body']);
+            }
+        }
+
+        if ($action == "GetOriginProtect") {
+            $length = intval($result['ContentLength']);
+            if($length > 0){
+                $content = $this->geCiContentInfo($result, $length);
+                $obj = simplexml_load_string($content, "SimpleXMLElement", LIBXML_NOCDATA);
+                $arr = json_decode(json_encode($obj),true);
+                $result['OriginProtectStatus'] = isset($arr[0]) ? $arr[0] : '';
+                unset($result['Body']);
+            }
+        }
+
+        if ($action == "GetHotLink") {
+            $length = intval($result['ContentLength']);
+            if($length > 0){
+                $content = $this->geCiContentInfo($result, $length);
+                $obj = simplexml_load_string($content, "SimpleXMLElement", LIBXML_NOCDATA);
+                $arr = json_decode(json_encode($obj),true);
+                $result['Hotlink'] = $arr;
+                unset($result['Body']);
+            }
+        }
+
+        if ($action == "AutoTranslationBlockProcess") {
+            $length = intval($result['ContentLength']);
+            if($length > 0){
+                $content = $this->geCiContentInfo($result, $length);
+                $obj = simplexml_load_string($content, "SimpleXMLElement", LIBXML_NOCDATA);
+                $arr = json_decode(json_encode($obj),true);
+                $result['TranslationResult'] = isset($arr[0]) ? $arr[0] : '';
+                unset($result['Body']);
             }
         }
 
@@ -125,6 +172,33 @@ class ResultTransformer {
             'CreateMediaSDRtoHDRJobs' => 1,
             'CreateMediaDigitalWatermarkJobs' => 1,
             'CreateMediaExtractDigitalWatermarkJobs' => 1,
+            'GetWorkflowInstance' => 1,
+            'CreateMediaTranscodeTemplate' => 1,
+            'UpdateMediaTranscodeTemplate' => 1,
+            'CreateMediaHighSpeedHdTemplate' => 1,
+            'UpdateMediaHighSpeedHdTemplate' => 1,
+            'CreateMediaAnimationTemplate' => 1,
+            'UpdateMediaAnimationTemplate' => 1,
+            'CreateMediaConcatTemplate' => 1,
+            'UpdateMediaConcatTemplate' => 1,
+            'CreateMediaVideoProcessTemplate' => 1,
+            'UpdateMediaVideoProcessTemplate' => 1,
+            'CreateMediaVideoMontageTemplate' => 1,
+            'UpdateMediaVideoMontageTemplate' => 1,
+            'CreateMediaVoiceSeparateTemplate' => 1,
+            'UpdateMediaVoiceSeparateTemplate' => 1,
+            'CreateMediaSuperResolutionTemplate' => 1,
+            'UpdateMediaSuperResolutionTemplate' => 1,
+            'CreateMediaPicProcessTemplate' => 1,
+            'UpdateMediaPicProcessTemplate' => 1,
+            'CreateMediaWatermarkTemplate' => 1,
+            'UpdateMediaWatermarkTemplate' => 1,
+            'CreateInventoryTriggerJob' => 1,
+            'DescribeInventoryTriggerJobs' => 1,
+            'DescribeInventoryTriggerJob' => 1,
+            'CreateMediaNoiseReductionJobs' => 1,
+            'CreateMediaQualityEstimateJobs' => 1,
+            'CreateMediaStreamExtractJobs' => 1,
         );
         if (key_exists($action, $xml2JsonActions)) {
             $length = intval($result['ContentLength']);
@@ -133,6 +207,7 @@ class ResultTransformer {
                 $obj = simplexml_load_string($content, "SimpleXMLElement", LIBXML_NOCDATA);
                 $xmlData = json_decode(json_encode($obj),true);
                 $result['Response'] = $xmlData;
+                unset($result['Body']);
             }
         }
 

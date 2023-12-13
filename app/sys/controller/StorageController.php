@@ -13,7 +13,7 @@ namespace app\sys\controller;
 use app\BaseController;
 use app\sys\model\StorageModel;
 use diygw\DiygwUpload;
-
+use diygw\storage\Driver as StorageDriver;
 /**
  * @mixin \diygw\model\DiygwModel
  * @package app\sys\controller
@@ -30,16 +30,34 @@ class StorageController extends BaseController
     public $notNeedLogin = [];
 
     public function upload(){
-        $upload = new DiygwUpload();
-        $files = $this->request->file();
-        $type = $this->request->param('type');
-        //验证文件类型并上传文件
-        $datas = $upload->checkFiles($type,$files)->multiUpload($files['file']);
-        $results = [];
-        foreach ($datas as $data){
+        $storage = new StorageDriver();
+        // 设置上传文件的信息
+        $storage->setUploadFile('file')
+            ->setRootDirName($this->request->param('type'))
+            ->setValidationScene($this->request->param('type'));
+        $data = $storage->getSaveFileInfo();
+        $tmpdata = null;
+        if ($data['md5']) {
             $storageModel = new StorageModel();
-            $results[] = $storageModel->add($data);
+            $tmpdata = $storageModel->withoutGlobalScope()->where('type', $this->request->param('type'))->where('md5', $data['md5'])->limit(1)->find();
+            if ($tmpdata) {
+                $tmpdata = $tmpdata->toArray();
+                unset($tmpdata['storageId']);
+                unset($tmpdata['parentId']);
+                $tmpdata['name'] = $data['name'];
+                $tmpdata['parentId'] = $data['parentId'];
+                $data = $tmpdata;
+            }
         }
-        return $this->successData($results[0]);
+        // 执行文件上传
+        if (empty($tmpdata)) {
+            if (!$storage->upload()) {
+                return $this->error('文件上传失败：' . $storage->getError());
+            }
+        }
+        $storageModel = new StorageModel();
+        $data['userid'] = $this->userId;
+        $data = $storageModel->add($data);
+        return $this->successData($data);
     }
 }

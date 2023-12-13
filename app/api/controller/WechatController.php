@@ -1,11 +1,9 @@
 <?php
 namespace app\api\controller;
 use app\BaseController;
-
-use app\common\model\DiyOrderModel;
-use app\common\model\DiyUserModel;
-use EasyWeChat\Factory;
-use Overtrue\Socialite\AuthorizeFailedException;
+use app\diy\model\UserModel;
+use EasyWeChat\OfficialAccount\Application;
+use Overtrue\Socialite\Exceptions\AuthorizeFailedException;
 use thans\jwt\facade\JWTAuth;
 use think\App;
 
@@ -30,7 +28,8 @@ class WechatController extends BaseController
     {
         parent::__construct($app);
         $minConfig = config('wechat.official_account');
-        $this->wechatApp = Factory::officialAccount($minConfig);
+        $this->wechatApp =new Application($minConfig);
+
     }
 
     /**
@@ -53,12 +52,11 @@ class WechatController extends BaseController
     public function  login(){
         $code = $this->request->param('code');
         try {
-            $token = $this->wechatApp->oauth->getAccessToken($code);
-            $wechatuser = $this->wechatApp->oauth->user($token);
+            $wechatuser =  $this->wechatApp->getOAuth()->userFromCode($code);
             if($wechatuser->getId()){
                 $openid = $wechatuser->getId();
                 $type = 'wechat';
-                $model = new DiyUserModel();
+                $model = new UserModel();
                 //查找获取微信小程序用户
                 $user = $model->where('openid',$openid)->where('type',$type)->find();
                 $data['openid'] = $openid;
@@ -73,7 +71,7 @@ class WechatController extends BaseController
                     $data['id'] = $userId;
                     $user->edit($data);
                 }else{
-                    $model = new DiyUserModel();
+                    $model = new UserModel();
                     $model->add($data);
                     $userId = $data['id'];
                 }

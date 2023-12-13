@@ -2,11 +2,11 @@
 namespace app\api\controller;
 use app\BaseController;
 
-use app\common\model\DiyOrderModel;
-use app\common\model\DiyUserModel;
-use EasyWeChat\Factory;
+use app\diy\model\OrderModel;
+use app\diy\model\UserModel;
+use EasyWeChat\Pay\Application;
 use think\App;
-use think\facade\Log;
+
 
 /*
  * 支付
@@ -30,7 +30,7 @@ class WepayController extends BaseController
     {
         parent::__construct($app);
         $paymentConfig = config('wechat.payment');
-        $this->wepayApp = Factory::payment($paymentConfig);
+        $this->wepayApp =  new Application($paymentConfig);
     }
 
     /**
@@ -42,7 +42,7 @@ class WepayController extends BaseController
      * @throws \think\exception\DbException
      */
     public function order(){
-        $userModel = DiyUserModel::where(['id'=>$this->request->userId])->find();
+        $userModel = UserModel::where(['id'=>$this->request->userId])->find();
         if(!$userModel){
             return $this->error('请先登录'.$this->request->userId);
         }
@@ -57,7 +57,7 @@ class WepayController extends BaseController
         $data['payStatus'] = 0;
         $data['openid'] = $user['openid'];
         $data['userId'] = $this->request->userId;
-        $model = new DiyOrderModel();
+        $model = new OrderModel();
         $data = $model->add($data);
         $notify_url = url('api/wepay/notify')
             ->suffix('html')
@@ -88,7 +88,7 @@ class WepayController extends BaseController
      */
     public function notify(){
         $response = $this->wepayApp->handlePaidNotify(function ($message,$error){
-            $order = DiyOrderModel::where(['order_no'=>$message['out_trade_no']])->find();
+            $order = OrderModel::where(['order_no'=>$message['out_trade_no']])->find();
             if (!$order || $order['status'] == '1') return true;
             if ($message['return_code'] === 'SUCCESS') {
                 if ($message['result_code'] === 'SUCCESS') {

@@ -51,15 +51,6 @@ class ExceptionHandle extends Handle
     public function render($request, Throwable $e): Response
     {
         // 添加自定义异常处理机制
-        // 参数验证错误
-        if ($e instanceof ValidateException) {
-            return json($e->getError(), 422);
-        }
-
-        // 请求异常
-        if ($e instanceof HttpException && $request->isAjax()) {
-            return response($e->getMessage(), $e->getStatusCode());
-        }
 
         // 其他错误交给系统处理
         return parent::render($request, $e);

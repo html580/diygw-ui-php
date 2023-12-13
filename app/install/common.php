@@ -8,9 +8,10 @@ function check_env()
 {
     $items = array(
         'os' => array('操作系统', '不限制', '类Unix', PHP_OS, 'success'),
-        'php' => array('PHP版本', '5.6', '5.6+', PHP_VERSION, 'success'),
+        'php' => array('PHP版本', '8.0', 'Sodium+', PHP_VERSION, 'success'),
         'upload' => array('附件上传', '不限制', '2M+', '未知', 'success'),
         'gd' => array('GD库', '2.0', '2.0+', '未知', 'success'),
+        'sodium' => array('SODIUM库', '2.0', '2.0+', '未知', 'success'),
     );
 
     //PHP环境检测
@@ -30,6 +31,14 @@ function check_env()
     } else {
         $items['gd'][3] = $tmp['GD Version'];
     }
+
+    if (!extension_loaded('sodium')) {
+        $items['sodium'][3] = '未开启';
+        $items['sodium'][4] = 'error';
+    } else {
+        $items['sodium'][3] = '已开启';
+    }
+
     unset($tmp);
     return $items;
 }

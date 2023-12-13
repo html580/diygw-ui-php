@@ -53,7 +53,7 @@ class LoginController extends BaseController
             return $this->error("用户名或密码错误");
         }else{
             //创建登录用户TOKEN$user->toArray()
-            $token = "bearer".JWTAuth::builder(['uid' => $user->userId]);
+            $token = "bearer".JWTAuth::builder([$this->tokenKey => $user->userId]);
             $data = $user->toArray();
             $data['token'] = $token;
             $roles=[];
@@ -123,7 +123,7 @@ class LoginController extends BaseController
                 $model->add($data);
                 $userId = $data['id'];
             }
-            $token = "bearer".JWTAuth::builder(['uid' => $userId]);
+            $token = "bearer".JWTAuth::builder([$this->tokenKey => $userId]);
             $opendata['token'] = $token;
             $data = array_merge($data,$opendata);
             return $this->successData($data);

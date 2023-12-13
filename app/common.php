@@ -121,6 +121,15 @@ function get_mysql_data($sql_path, $old_prefix = "", $new_prefix = "", $separato
     return $result;
 }
 
+/**
+ * 文本左斜杠转换为右斜杠
+ * @param string $string
+ * @return mixed
+ */
+function convert_left_slash(string $string)
+{
+    return str_replace('\\', '/', $string);
+}
 
 /**
  * 生成订单号
@@ -128,4 +137,22 @@ function get_mysql_data($sql_path, $old_prefix = "", $new_prefix = "", $separato
 function getOrderNo()
 {
     return date('YmdHis') . rand(10000000, 99999999);
+}
+
+function getFirstLetter($str) {
+    $pos = strpos($str, '_');
+    if ($pos === false) {
+        return substr($str, 0, 1);
+    } else {
+        return substr($str, 0, $pos);
+    }
+}
+
+function getAfterFirstUnderscore($str) {
+    $pos = strpos($str, '_');
+    if ($pos === false) {
+        return "";  // 如果没有下划线，则返回空字符串或其他适当的值
+    } else {
+        return substr($str, $pos + 1);
+    }
 }

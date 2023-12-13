@@ -5,7 +5,7 @@
 
 return [
     // 应用地址
-    'app_host'         => env('app.host', ''),
+    'app_host'         => env('APP_HOST', ''),
     // 应用的命名空间
     'app_namespace'    => '',
     // 是否启用路由
@@ -23,7 +23,7 @@ return [
     'deny_app_list'    => [],
 
     // 异常页面的模板文件
-    'exception_tmpl'   => \think\facade\App::getAppPath() . 'view/exception.tpl',
+    'exception_tmpl'   => app()->getThinkPath() . 'tpl/think_exception.tpl',
 
     // 错误显示信息,非调试模式有效
     'error_message'    => '页面错误！请稍后再试～',

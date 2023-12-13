@@ -4,6 +4,7 @@
 // +----------------------------------------------------------------------
 return [
     // 指令定义
+    // 指令定义
     'commands' => [
         'diygw:table' => 'app\command\DiygwTableCommand',
         'diygw:tableandapi' => 'app\command\DiygwTableAndApiCommand',

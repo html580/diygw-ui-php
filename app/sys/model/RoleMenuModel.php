@@ -22,4 +22,6 @@ class RoleMenuModel extends DiygwModel
     public $name = 'sys_role_menu';
     // 不执行软删除
     protected $withTrashed = true;
+    protected $deleteTime = false;
+
 }

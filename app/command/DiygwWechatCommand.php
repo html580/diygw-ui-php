@@ -70,7 +70,7 @@ return [
              * 账号基本信息，请从微信公众平台/开放平台获取
              */
             'app_id'  =>  env('wechat.mini_app_id'),         // AppID
-            'secret'  =>  env('wechat.mini_secret'),     // AppSecret
+            'secret'  =>  env('wechat.mini_secret'),         // AppSecret
             'token'   =>  env('wechat.mini_token'),          // Token
             'aes_key' =>  env('wechat.mini_aes_key'),                    // EncodingAESKey，兼容与安全模式下请一定要填写！！！
         
@@ -110,12 +110,11 @@ return [
         'payment' => [
             'app_id'    => env('wechat.pay_app_id'),
             'mch_id'    => env('wechat.pay_mch_id'),
-            'key'       => env('wechat.pay_signature'),   // API v2 密钥 (注意: 是v2密钥 是v2密钥 是v2密钥)
-
+            // v3 API 秘钥
+            'secret_key'       => env('wechat.pay_signature'),
             // 如需使用敏感接口（如退款、发送红包等）需要配置 API 证书路径(登录商户平台下载 API 证书)
-            'cert_path' => 'path/to/your/cert.pem', // XXX: 绝对路径！！！！
-            'key_path'  => 'path/to/your/key',      // XXX: 绝对路径！！！！
-
+            'cert_path' => env('wechat.pay_cert_path'), // XXX: 绝对路径！！！！
+            'key_path'  => env('wechat.pay_key_path'),      // XXX: 绝对路径！！！！
             'notify_url' => '默认的订单回调地址',     // 你也可以在下单时单独设置来想覆盖它
         ],
 

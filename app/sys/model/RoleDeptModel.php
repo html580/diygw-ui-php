@@ -22,4 +22,6 @@ class RoleDeptModel extends DiygwModel
     public $name = 'sys_role_dept';
     // 不执行软删除
     protected $withTrashed = true;
+    protected $deleteTime = false;
+
 }

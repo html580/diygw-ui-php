@@ -5,3 +5,7 @@ composer.lock
 Thumbs.db
 /.idea
 /.vscode
+/.settings
+/.buildpath
+/.project
+.phpunit.result.cache

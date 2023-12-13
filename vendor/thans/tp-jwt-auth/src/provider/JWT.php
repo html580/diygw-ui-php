@@ -11,8 +11,6 @@ use think\App;
 use think\Container;
 use think\facade\Config;
 use think\Request;
-use Lcobucci\JWT\Builder;
-use Lcobucci\JWT\Parser;
 
 class JWT
 {
@@ -23,8 +21,8 @@ class JWT
     public function __construct(Request $request)
     {
         $this->request = $request;
-        $config        = require __DIR__.'/../../config/config.php';
-        if (strpos(App::VERSION, '6.0') !== false) {
+        $config = require __DIR__ . '/../../config/config.php';
+        if (strpos(App::VERSION, '5.') !== 0) {
             $this->config = array_merge($config, Config::get('jwt') ?? []);
         } else {
             $this->config = array_merge($config, Config::get('jwt.') ?? []);
@@ -45,13 +43,11 @@ class JWT
         $keys = $this->config['secret']
             ? $this->config['secret']
             : [
-                'public'   => $this->config['public_key'],
-                'private'  => $this->config['private_key'],
+                'public' => $this->config['public_key'],
+                'private' => $this->config['private_key'],
                 'password' => $this->config['password'],
             ];
         Container::getInstance()->make('thans\jwt\provider\JWT\Lcobucci', [
-            new Builder(),
-            new Parser(),
             $this->config['algo'],
             $keys,
         ]);
@@ -87,7 +83,7 @@ class JWT
         $chains = [
             'header' => new AuthHeader(),
             'cookie' => new Cookie(),
-            'param'  => new Param()
+            'param' => new Param()
         ];
 
         $mode = $this->config['token_mode'];

@@ -18,7 +18,6 @@ use diygw\model\DiygwModel;
  */
 class DeptModel extends DiygwModel
 {
-
     // 表名
     public $name = 'sys_dept';
     protected $likeField=['deptName'];
