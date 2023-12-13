@@ -1,10 +1,10 @@
 ## 🌈 DIYGW-UI-PHP
 
-DIYGW-UI-PHP是一款基于thinkphp framework和 element admin开发而成的前后端分离系统。目的是结合现有diygw-ui打造一个后台API开发。
+DIYGW-UI-PHP是一款基于thinkphp8 framework和 element plus admin开发而成的前后端分离系统。目的是结合现有diygw-ui打造一个后台API开发。
 
 #### 💒 代码仓库
 
-- <a target="_blank" href="https://gitee.com/diygw/diygw-ui-php">基于thinkphp6实现的DIYGW-UI-PHP</a>
+- <a target="_blank" href="https://gitee.com/diygw/diygw-ui-php">基于thinkphp8实现的DIYGW-UI-PHP</a>
 
 #### 💒 集成前端
 
@@ -34,7 +34,7 @@ DIY官网可视化工具打造低代码可视化一键生成导出源码工具�
 
 更多设计前往https://www.diygw.com 设计
 
-> 运行环境要求PHP7.2+，兼容PHP8.1
+> 运行环境要求PHP8.0+
 
 ### ⚡ 后台安装
 
@@ -78,5 +78,7 @@ SSL证书配置：
 /www/wwwroot/你的域名/diygw-ui-php/.env文件修改为正式环境的数据库用户名密码
 先从本地导出数据，然后在宝塔上管理数据库导入数据库
 
+5、访问超级管理界面，集成CRUD代码生成器。
+你的域名/super/index.html		输入用户名密码即可访问
 
-5、访问  你的域名/index.html		输入用户名密码即可访问 
+6、结合diygw-ui-admin生成管理界面  你的域名/admin/index.html		输入用户名密码即可访问 
