@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit24111627e907be76ace1d320f1ab732d
+class ComposerStaticInitb069d9d7657d178144b308dd62151878
 {
     public static $files = array (
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
@@ -137,10 +137,10 @@ class ComposerStaticInit24111627e907be76ace1d320f1ab732d
         ),
         'think\\' => 
         array (
-            0 => __DIR__ . '/..' . '/topthink/framework/src/think',
-            1 => __DIR__ . '/..' . '/topthink/think-filesystem/src',
-            2 => __DIR__ . '/..' . '/topthink/think-helper/src',
-            3 => __DIR__ . '/..' . '/topthink/think-orm/src',
+            0 => __DIR__ . '/..' . '/topthink/think-helper/src',
+            1 => __DIR__ . '/..' . '/topthink/think-orm/src',
+            2 => __DIR__ . '/..' . '/topthink/framework/src/think',
+            3 => __DIR__ . '/..' . '/topthink/think-filesystem/src',
             4 => __DIR__ . '/..' . '/topthink/think-template/src',
         ),
         'thans\\jwt\\' => 
@@ -245,8 +245,8 @@ class ComposerStaticInit24111627e907be76ace1d320f1ab732d
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-factory/src',
-            1 => __DIR__ . '/..' . '/psr/http-message/src',
+            0 => __DIR__ . '/..' . '/psr/http-message/src',
+            1 => __DIR__ . '/..' . '/psr/http-factory/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (
@@ -357,10 +357,10 @@ class ComposerStaticInit24111627e907be76ace1d320f1ab732d
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit24111627e907be76ace1d320f1ab732d::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit24111627e907be76ace1d320f1ab732d::$prefixDirsPsr4;
-            $loader->fallbackDirsPsr0 = ComposerStaticInit24111627e907be76ace1d320f1ab732d::$fallbackDirsPsr0;
-            $loader->classMap = ComposerStaticInit24111627e907be76ace1d320f1ab732d::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitb069d9d7657d178144b308dd62151878::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitb069d9d7657d178144b308dd62151878::$prefixDirsPsr4;
+            $loader->fallbackDirsPsr0 = ComposerStaticInitb069d9d7657d178144b308dd62151878::$fallbackDirsPsr0;
+            $loader->classMap = ComposerStaticInitb069d9d7657d178144b308dd62151878::$classMap;
 
         }, null, ClassLoader::class);
     }
