@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitb069d9d7657d178144b308dd62151878
+class ComposerStaticInit1744293934984bb6adaffac9cf213e5d
 {
     public static $files = array (
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
@@ -137,9 +137,9 @@ class ComposerStaticInitb069d9d7657d178144b308dd62151878
         ),
         'think\\' => 
         array (
-            0 => __DIR__ . '/..' . '/topthink/think-helper/src',
-            1 => __DIR__ . '/..' . '/topthink/think-orm/src',
-            2 => __DIR__ . '/..' . '/topthink/framework/src/think',
+            0 => __DIR__ . '/..' . '/topthink/framework/src/think',
+            1 => __DIR__ . '/..' . '/topthink/think-helper/src',
+            2 => __DIR__ . '/..' . '/topthink/think-orm/src',
             3 => __DIR__ . '/..' . '/topthink/think-filesystem/src',
             4 => __DIR__ . '/..' . '/topthink/think-template/src',
         ),
@@ -357,10 +357,10 @@ class ComposerStaticInitb069d9d7657d178144b308dd62151878
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitb069d9d7657d178144b308dd62151878::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitb069d9d7657d178144b308dd62151878::$prefixDirsPsr4;
-            $loader->fallbackDirsPsr0 = ComposerStaticInitb069d9d7657d178144b308dd62151878::$fallbackDirsPsr0;
-            $loader->classMap = ComposerStaticInitb069d9d7657d178144b308dd62151878::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit1744293934984bb6adaffac9cf213e5d::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit1744293934984bb6adaffac9cf213e5d::$prefixDirsPsr4;
+            $loader->fallbackDirsPsr0 = ComposerStaticInit1744293934984bb6adaffac9cf213e5d::$fallbackDirsPsr0;
+            $loader->classMap = ComposerStaticInit1744293934984bb6adaffac9cf213e5d::$classMap;
 
         }, null, ClassLoader::class);
     }
