@@ -221,7 +221,7 @@ trait BaseDbTrait
     public function createData(array $data)
     {
         $model = static::create($data, $this->field, true);
-        return $model->{$this->getPk()};
+        return $model->{$this->pk};
     }
 
     public function afterGet($data){
@@ -249,10 +249,8 @@ trait BaseDbTrait
         if ($trash) {
             return static::onlyTrashed()->find($id);
         }
-
-        return static::where($this->getPk(), $id)->field($field)->find();
+        return static::where($this->pk, $id)->field($field)->find();
     }
-
 
 
     /**
@@ -419,7 +417,7 @@ trait BaseDbTrait
      */
     public function filterData(array $data)
     {
-        $pk = $this->getPk();
+        $pk = $this->pk;
         foreach ($data as $field => $value) {
             if ((is_null($value))||$value=='null'||$value=='undefined') {
                 if($value!='0'){
@@ -445,5 +443,27 @@ trait BaseDbTrait
         return $data;
     }
 
+    public function incOrDec($data){
+        $id = $data['id'];
+        $value = $data['value'];
+        $key = $data['key'];
+        if ((is_numeric($value) && ctype_digit($value))) {
+            $value = intval($value);
+        }
+        if($value<0){
+            return static::where($this->pk, $id)->setDec($key, $value);
+        }else{
+            return static::where($this->pk, $id)->setInc($key, $value);
+        }
+    }
+
+    public function incOrDecs($data){
+        foreach ($data as $item){
+            if(!$this->incOrDec($item)){
+                return false;
+            }
+        }
+        return  true;
+    }
 
 }

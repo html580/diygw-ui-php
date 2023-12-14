@@ -95,32 +95,8 @@ CREATE TABLE `log_logins`  (
                                `update_time` datetime(0) DEFAULT NULL,
                                `delete_time` datetime(0) DEFAULT NULL,
                                PRIMARY KEY (`info_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 22 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '登录日志' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '登录日志' ROW_FORMAT = Dynamic;
 
--- ----------------------------
--- Records of log_logins
--- ----------------------------
-INSERT INTO `log_logins` VALUES (1, 'admin', '1', '127.0.0.1', 'IANA保留地址用于本地回送', 'Chrome', 'Windows 10', NULL, NULL, NULL, '2023-12-12 16:54:02', '2023-12-12 16:54:02', NULL);
-INSERT INTO `log_logins` VALUES (2, 'admin', '1', '127.0.0.1', 'IANA保留地址用于本地回送', 'Chrome', 'Windows 10', NULL, NULL, NULL, '2023-12-12 16:56:06', '2023-12-12 16:56:06', NULL);
-INSERT INTO `log_logins` VALUES (3, 'admin', '1', '127.0.0.1', 'IANA保留地址用于本地回送', 'Chrome', 'Windows 10', NULL, NULL, NULL, '2023-12-12 16:59:06', '2023-12-12 16:59:06', NULL);
-INSERT INTO `log_logins` VALUES (4, 'admin', '1', '127.0.0.1', 'IANA保留地址用于本地回送', 'Chrome', 'Windows 10', NULL, NULL, NULL, '2023-12-12 17:01:19', '2023-12-12 17:01:19', NULL);
-INSERT INTO `log_logins` VALUES (5, 'admin', '1', '127.0.0.1', 'IANA保留地址用于本地回送', 'Chrome', 'Windows 10', NULL, NULL, NULL, '2023-12-12 17:05:14', '2023-12-12 17:05:14', NULL);
-INSERT INTO `log_logins` VALUES (6, 'admin', '1', '127.0.0.1', 'IANA保留地址用于本地回送', 'Chrome', 'Windows 10', NULL, NULL, NULL, '2023-12-12 17:07:16', '2023-12-12 17:07:16', NULL);
-INSERT INTO `log_logins` VALUES (7, 'admin', '1', '127.0.0.1', 'IANA保留地址用于本地回送', 'Chrome', 'Windows 10', NULL, NULL, NULL, '2023-12-12 17:12:58', '2023-12-12 17:12:58', NULL);
-INSERT INTO `log_logins` VALUES (8, 'admin', '1', '127.0.0.1', 'IANA保留地址用于本地回送', 'Chrome', 'Windows 10', NULL, NULL, NULL, '2023-12-13 09:14:51', '2023-12-13 09:14:51', NULL);
-INSERT INTO `log_logins` VALUES (9, 'admin', '1', '127.0.0.1', 'IANA保留地址用于本地回送', 'Chrome', 'Windows 10', NULL, NULL, NULL, '2023-12-13 09:15:47', '2023-12-13 09:15:47', NULL);
-INSERT INTO `log_logins` VALUES (10, 'admin', '1', '127.0.0.1', 'IANA保留地址用于本地回送', 'Chrome', 'Windows 10', NULL, NULL, NULL, '2023-12-13 09:16:15', '2023-12-13 09:16:15', NULL);
-INSERT INTO `log_logins` VALUES (11, 'admin', '1', '127.0.0.1', 'IANA保留地址用于本地回送', 'Chrome', 'Windows 10', NULL, NULL, NULL, '2023-12-13 09:18:20', '2023-12-13 09:18:20', NULL);
-INSERT INTO `log_logins` VALUES (12, 'admin', '1', '127.0.0.1', 'IANA保留地址用于本地回送', 'Chrome', 'Windows 10', NULL, NULL, NULL, '2023-12-13 09:34:19', '2023-12-13 09:34:19', NULL);
-INSERT INTO `log_logins` VALUES (13, 'admin', '1', '127.0.0.1', 'IANA保留地址用于本地回送', 'Chrome', 'Windows 10', NULL, NULL, NULL, '2023-12-13 09:38:37', '2023-12-13 09:38:37', NULL);
-INSERT INTO `log_logins` VALUES (14, 'admin', '1', '127.0.0.1', 'IANA保留地址用于本地回送', 'Chrome', 'Windows 10', NULL, NULL, NULL, '2023-12-13 09:39:20', '2023-12-13 09:39:20', NULL);
-INSERT INTO `log_logins` VALUES (15, 'admin', '1', '127.0.0.1', 'IANA保留地址用于本地回送', 'Chrome', 'Windows 10', NULL, NULL, NULL, '2023-12-13 10:24:57', '2023-12-13 10:24:57', NULL);
-INSERT INTO `log_logins` VALUES (16, 'admin', '1', '127.0.0.1', 'IANA保留地址用于本地回送', 'Chrome', 'Windows 10', NULL, NULL, NULL, '2023-12-13 10:29:15', '2023-12-13 10:29:15', NULL);
-INSERT INTO `log_logins` VALUES (17, 'admin', '1', '127.0.0.1', 'IANA保留地址用于本地回送', 'Chrome', 'Windows 10', NULL, NULL, NULL, '2023-12-13 10:32:48', '2023-12-13 10:32:48', NULL);
-INSERT INTO `log_logins` VALUES (18, 'admin', '1', '127.0.0.1', 'IANA保留地址用于本地回送', 'Chrome', 'Windows 10', NULL, NULL, NULL, '2023-12-13 10:36:14', '2023-12-13 10:36:14', NULL);
-INSERT INTO `log_logins` VALUES (19, 'admin', '1', '127.0.0.1', 'IANA保留地址用于本地回送', 'Chrome', 'Windows 10', NULL, NULL, NULL, '2023-12-13 11:50:41', '2023-12-13 11:50:41', NULL);
-INSERT INTO `log_logins` VALUES (20, 'admin', '1', '127.0.0.1', 'IANA保留地址用于本地回送', 'Chrome', 'Windows 10', NULL, NULL, NULL, '2023-12-13 11:53:11', '2023-12-13 11:53:11', NULL);
-INSERT INTO `log_logins` VALUES (21, 'admin', '1', '127.0.0.1', 'IANA保留地址用于本地回送', 'Chrome', 'Windows 10', NULL, NULL, NULL, '2023-12-13 16:47:41', '2023-12-13 16:47:41', NULL);
 
 -- ----------------------------
 -- Table structure for log_operations
@@ -571,18 +547,8 @@ CREATE TABLE `sys_storage`  (
                                 `delete_time` datetime(0) DEFAULT NULL,
                                 PRIMARY KEY (`storage_id`) USING BTREE,
                                 INDEX `type`(`type`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '资源管理器' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '资源管理器' ROW_FORMAT = Dynamic;
 
--- ----------------------------
--- Records of sys_storage
--- ----------------------------
-INSERT INTO `sys_storage` VALUES (5, '0', '订单 (1).png', 'png', '20231212\\2f3bc0f2f0f1cf8e488952be2b25ee77.png', NULL, 'http://tp8.com/D:/work/diygw-sass/diygw-php/diygw-ui-php/runtime/storage/20231212/2f3bc0f2f0f1cf8e488952be2b25ee77.png', 'local', NULL, 'image', '16e05e5a7903938b04ec36040899c2485403f058', NULL, NULL, NULL, 767, '2023-12-12 17:20:35', '2023-12-12 19:12:25', '2023-12-12 19:12:25');
-INSERT INTO `sys_storage` VALUES (6, '0', '订单 (1).png', 'png', 'image/20231212/16e05e5a7903938b04ec36040899c2485403f058.png', NULL, 'http://tp8.com/storage/image/20231212/16e05e5a7903938b04ec36040899c2485403f058.png', 'local', NULL, 'image', '16e05e5a7903938b04ec36040899c2485403f058', NULL, NULL, NULL, 767, '2023-12-12 17:34:40', '2023-12-12 19:12:15', '2023-12-12 19:12:15');
-INSERT INTO `sys_storage` VALUES (7, '0', '订单 (1).png', 'png', '20231212\\2f3bc0f2f0f1cf8e488952be2b25ee77.png', NULL, 'http://tp8.com/D:/work/diygw-sass/diygw-php/diygw-ui-php/runtime/storage/20231212/2f3bc0f2f0f1cf8e488952be2b25ee77.png', 'local', NULL, 'image', '16e05e5a7903938b04ec36040899c2485403f058', NULL, NULL, NULL, 767, '2023-12-12 17:37:13', '2023-12-12 19:10:26', '2023-12-12 19:10:25');
-INSERT INTO `sys_storage` VALUES (8, '0', '订单 (1).png', 'png', 'image/20231212/16e05e5a7903938b04ec36040899c2485403f058.png', NULL, 'http://tp8.com/storage/image/20231212/16e05e5a7903938b04ec36040899c2485403f058.png', 'local', NULL, 'image', '16e05e5a7903938b04ec36040899c2485403f058', NULL, NULL, NULL, 767, '2023-12-12 19:12:51', '2023-12-12 19:12:51', NULL);
-INSERT INTO `sys_storage` VALUES (9, '0', '扫码 (1).png', 'png', 'image/20231212/f49cc38c0ff47980ac00218f3306613b6e283170.png', NULL, 'https://cdn.diygw.com/image/20231212/f49cc38c0ff47980ac00218f3306613b6e283170.png', 'qiniu', NULL, 'image', 'f49cc38c0ff47980ac00218f3306613b6e283170', NULL, NULL, NULL, 541, '2023-12-12 19:24:28', '2023-12-12 19:29:19', '2023-12-12 19:29:19');
-INSERT INTO `sys_storage` VALUES (10, '0', '待付款 (1).png', 'png', 'image/20231212/2ec32621dcadecb315a78369501771d4e9b1b08f.png', NULL, 'http://tp8.com/storage/image/20231212/2ec32621dcadecb315a78369501771d4e9b1b08f.png', 'local', NULL, 'image', '2ec32621dcadecb315a78369501771d4e9b1b08f', NULL, NULL, NULL, 676, '2023-12-12 19:30:28', '2023-12-12 19:30:28', NULL);
-INSERT INTO `sys_storage` VALUES (11, '0', '分组 9.png', 'png', 'image/20231212/68bd881d5a5e5b3d15b3f18006b843d15182ece4.png', NULL, 'http://tp8.com/storage/image/20231212/68bd881d5a5e5b3d15b3f18006b843d15182ece4.png', 'local', NULL, 'image', '68bd881d5a5e5b3d15b3f18006b843d15182ece4', NULL, NULL, NULL, 2093, '2023-12-12 19:41:33', '2023-12-12 19:41:33', NULL);
 
 -- ----------------------------
 -- Table structure for sys_user
@@ -616,6 +582,6 @@ CREATE TABLE `sys_user`  (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, 'admin', '88f80b94894f10fa7a7fe2e4646be3e8', 'vYpRfQ', 'DIY可视化', '15913132246', 1, 'http://tp8.com/storage/image/20231212/2ec32621dcadecb315a78369501771d4e9b1b08f.png', '0', '280160522@qq.com', 2, 1, 'admin', '1', NULL, '0', '2021-12-03 09:46:55', '2023-12-13 11:59:35', NULL, '1', '1');
+INSERT INTO `sys_user` VALUES (1, 'admin', '88f80b94894f10fa7a7fe2e4646be3e8', 'vYpRfQ', 'DIY可视化', '15913132246', 1, NULL, '0', '280160522@qq.com', 2, 1, 'admin', '1', NULL, '0', '2021-12-03 09:46:55', '2023-12-13 11:59:35', NULL, '1', '1');
 
 SET FOREIGN_KEY_CHECKS = 1;

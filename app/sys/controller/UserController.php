@@ -11,6 +11,7 @@ declare (strict_types = 1);
 namespace app\sys\controller;
 
 use app\BaseController;
+use app\sys\model\UserModel;
 
 /**
  * @mixin \diygw\model\DiygwModel
@@ -114,5 +115,10 @@ class UserController extends BaseController
     */
    public function afterDelete(&$id){
        return true;
+   }
+
+   public function status(){
+       $this->model->where('user_id',$this->request->param('userId'))->update(['status'=>$this->request->param('status')]);
+       return $this->success("修改成功");
    }
 }

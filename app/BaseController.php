@@ -443,6 +443,42 @@ abstract class BaseController
     }
 
     /**
+     * 对某个字段增加或减少数量
+     */
+    public function incOrDec()
+    {
+        try {
+            $data = $this->request->param();
+            $data = $this->model->incOrDec($data);
+            if ($data) {
+                return $this->success('设置成功');
+            } else {
+                return $this->error('设置失败');
+            }
+        }catch (Exception $exception){
+            return $this->error($exception->getMessage());
+        }
+    }
+
+    /**
+     * 对某个字段增加或减少数量
+     */
+    public function incOrDecs()
+    {
+        try {
+            $data = $this->request->param();
+            $data = $this->model->incOrDecs($data);
+            if ($data) {
+                return $this->successData($data,'设置成功');
+            } else {
+                return $this->error('设置失败');
+            }
+        }catch (Exception $exception){
+            return $this->error($exception->getMessage());
+        }
+    }
+
+    /**
      * 输出模板
      * @param string $template
      * @param array $vars
