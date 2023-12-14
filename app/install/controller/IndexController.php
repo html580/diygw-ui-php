@@ -183,7 +183,7 @@ class IndexController extends BaseController
 
         //安装完毕
         install_show_msg('安装程序执行完毕！重新安装需要删除config/install.lock');
-        $adminUrl = url('/admin/index/index');
+        $adminUrl = url('/super/index');
         echo "<script type=\"text/javascript\">insok(\"{$adminUrl}\")</script>";
     }
 
