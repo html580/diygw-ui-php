@@ -107,7 +107,6 @@ abstract class BaseController
             if(class_exists($modelClass)){
                 $this->model = new $modelClass();
             } else{
-                $root = ucfirst($root);
                 if(strpos($controller,'api\\')!==false){
                     $controller = ucfirst(str_replace("api\\","",$controller));
                 }else{
@@ -117,6 +116,7 @@ abstract class BaseController
                 if(class_exists($modelClass)){
                     $this->model = new $modelClass();
                 }else{
+                    $root = ucfirst($root);
                     $modelClass = "\\app\\common\\model\\".$root.$controller."Model";
                     if(class_exists($modelClass)){
                         $this->model = new $modelClass();
