@@ -217,6 +217,56 @@ class DiygwQuery extends Query
                         continue;
                     }
                 }
+
+                $endField = "_range";
+                if (Str::endsWith($field,$endField)) {
+                    $field = Str::snake(Str::substr($field,0,Str::length($field) - Str::length($endField)));
+                    if (in_array($field, array_keys($fields))) {
+                        if(count($value)==2){
+                            $this->where($field, '>=', $value[0].' 00:00:00');
+                            $this->where($field, '<=', $value[1].' 23:59:59');
+                        }
+                        continue;
+                    }
+                }
+                $endField = "_eq";
+                if (Str::endsWith($field,$endField)) {
+                    $searchfields = explode("_",$field);
+                    //查询某个字段是否有限
+                    $searchTablefields = [];
+                    $tablefields = array_keys($fields);
+                    foreach ($searchfields as $tfield){
+                        if(in_array($tfield,$tablefields)){
+                            $searchTablefields[] = Str::snake($tfield);
+                        }
+                    }
+                    $this->where(implode("|",$searchTablefields),'=',$value );
+                    continue;
+                }
+
+                $endField = "_in";
+                if (Str::endsWith($field,$endField)) {
+                    $field = Str::snake(Str::substr($field,0,Str::length($field) - Str::length($endField)));
+                    if(is_array($value)){
+                        $this->whereIn($field,$value);
+                    }else if(Str::startsWith($value,"[")&&Str::endsWith($value,"[")){
+                        $this->whereIn($field,json_encode($value,true));
+                    }else {
+                        $this->whereIn($field,explode(",",$value));
+                    }
+                    continue;
+                }
+
+                if($field=='isself' && $value=='1' && (in_array('user_id',array_keys($fields))||in_array('userid',array_keys($fields)))){
+                    if(in_array('user_id',array_keys($fields))){
+                        $this->where('user_id',\request()->userId);
+                    }else{
+                        $this->where('userid',\request()->userId);
+                    }
+                    continue;
+                }
+
+
                 // = 值搜索
                 if ($value || is_numeric($value)) {
                     $tablefield = Str::snake($field);
