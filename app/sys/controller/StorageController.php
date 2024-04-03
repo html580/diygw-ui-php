@@ -29,23 +29,28 @@ class StorageController extends BaseController
     //判断不需要登录的方法
     public $notNeedLogin = [];
 
+
     public function upload(){
         $storage = new StorageDriver();
+        $type = $this->request->param('type');
+        if(empty($type)){
+            $type = "image";
+        }
         // 设置上传文件的信息
         $storage->setUploadFile('file')
-            ->setRootDirName($this->request->param('type'))
-            ->setValidationScene($this->request->param('type'));
+            ->setRootDirName($type)
+            ->setValidationScene($type);
         $data = $storage->getSaveFileInfo();
         $tmpdata = null;
         if ($data['md5']) {
             $storageModel = new StorageModel();
-            $tmpdata = $storageModel->withoutGlobalScope()->where('type', $this->request->param('type'))->where('md5', $data['md5'])->limit(1)->find();
+            $tmpdata = $storageModel->withoutGlobalScope()->where('type', $type)->where('md5', $data['md5'])->limit(1)->find();
             if ($tmpdata) {
                 $tmpdata = $tmpdata->toArray();
                 unset($tmpdata['storageId']);
                 unset($tmpdata['parentId']);
                 $tmpdata['name'] = $data['name'];
-                $tmpdata['parentId'] = $data['parentId'];
+                $tmpdata['parentId'] = isset($data['parentId'])?$data['parentId']:0;
                 $data = $tmpdata;
             }
         }
