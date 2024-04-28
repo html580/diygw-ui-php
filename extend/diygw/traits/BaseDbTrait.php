@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace diygw\traits;
 
 use diygw\Utils;
+use think\facade\Db;
 use think\helper\Str;
 
 trait BaseDbTrait
@@ -37,7 +38,7 @@ trait BaseDbTrait
         $field= $this->showField;
         // 不分页
         if (property_exists($this, 'paginate') && $this->paginate === false) {
-            $data =   $this->quickSearch($this->likeField,$this->arrayField,$this->isdataright,$this->isdatadeptright)
+            $data =   $this->quickSearch($this->likeField,$this->arrayField)
                 ->field($field)
                 ->diygwOrder()
                 ->select()->toArray();
@@ -59,12 +60,12 @@ trait BaseDbTrait
                 ])->toArray();
 
         }
+//        $this->getLastSql()
         //对结果返回前进行处理
         if ($this->afterList($list)) {
             return ['rows'  => $list['data'],'total' => $list['total']];
         }else{
             return ['rows'  => [],'total' => 0];
-
         }
     }
 
@@ -129,18 +130,18 @@ trait BaseDbTrait
     public function add(&$data)
     {
         try {
-            $this->startTrans();
+//            $this->startTrans();
             $pk =  $this->pk;
             if ($this->beforeAdd($data) && $this->allowField($this->field)->save($this->filterData($data))) {
                 $pkvalue =  $this->getLastInsID();
                 $data[Str::camel($pk)] = $pkvalue;
                 $this->afterAdd($data);
-                $this->commit();
+//                $this->commit();
                 return $data;
             }
         }catch (\Exception $e) {
             $this->error = $e->getMessage();
-            $this->rollback();
+//            $this->rollback();
             return false;
         }
         return false;
@@ -159,18 +160,18 @@ trait BaseDbTrait
     public function edit(&$data)
     {
         try {
-            $this->startTrans();
+//            $this->startTrans();
             $pk =  $this->pk;
             $id = $data[Str::camel($pk)];
             if ($this->beforeEdit($data) && static::update($this->filterData($data), [$pk => $id])) {
                 $this->updateChildren($id, $data);
                 $this->afterEdit($data);
-                $this->commit();
+//                $this->commit();
                 return $data;
             }
         }catch (\Exception $e) {
             $this->error = $e->getMessage();
-            $this->rollback();
+//            $this->rollback();
             return false;
         }
         return false;
@@ -447,15 +448,23 @@ trait BaseDbTrait
         $id = $data['id'];
         $value = $data['value'];
         $key = $data['key'];
-        if ((is_numeric($value) && ctype_digit($value))) {
-            $value = intval($value);
+        if (is_numeric($value)) {
+            $value = floatval($value);
         }
+        $operation = "+";
         if($value<0){
-            return static::where($this->pk, $id)->setDec($key, $value);
-        }else{
-            return static::where($this->pk, $id)->setInc($key, $value);
+            $operation = "-";
         }
+        $table = $this->getName();
+        $pk = $this->pk;
+
+        $sql = "update $table set $key=$key $operation $value where $pk=$id";
+        Db::execute($sql);
+        return true;
+//        return static::where($this->pk, $id)->setInc($key, $value);
     }
+
+
 
     public function incOrDecs($data){
         foreach ($data as $item){

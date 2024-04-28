@@ -21,4 +21,9 @@ class DictDataModel extends DiygwModel
     // 表名
     public $name = 'sys_dict_data';
 
+    public function getDicts($dictType){
+        $dictDataModel  = new DictDataModel();
+        $dicts = $dictDataModel->where('dict_type',$dictType)->field("dict_value value,dict_label label")->select()->toArray();
+        return $dicts;
+    }
 }

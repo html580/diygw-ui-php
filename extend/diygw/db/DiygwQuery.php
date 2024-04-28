@@ -145,7 +145,7 @@ class DiygwQuery extends Query
      * @param array $likeField
      * @return Query
      */
-    public function quickSearch(array $likeField = []): Query
+    public function quickSearch(array $likeField = [],array $arrayField = []): Query
     {
         $requestParams = \request()->param();
         if (empty($requestParams)) {
@@ -160,7 +160,6 @@ class DiygwQuery extends Query
                 }
             }
             if (isset($params[$field])) {
-
                 // ['>', value] || value
                 if (in_array($field, array_keys($fields))) {
                     if (is_array($params[$field])) {
@@ -170,6 +169,49 @@ class DiygwQuery extends Query
                     }
                 }
             } else {
+                if($field=='searchfields_or'){
+                    $values = explode('_or_',$value);
+                    $this->where(function ($query) use ($values,$fields) {
+                        foreach ($values as $keyvalue){
+                            $keyvalues = explode('_',$keyvalue);
+                            $field = $keyvalues[0];
+                            if(count($keyvalues)==2){
+                                if (in_array($field, array_keys($fields))) {
+                                    $query->whereOr($field,$keyvalues[1]);
+                                }
+                            }
+                            if(count($keyvalues)==3){
+                                $value = $keyvalues[2];
+                                $type = $keyvalues[1];
+                                if (in_array($field, array_keys($fields))) {
+                                    if($type=="gt"){
+                                        $query->whereOr($field,">",$value);
+                                    }else if($type=="get"){
+                                        $query->whereOr($field,">=",$value);
+                                    }else if($type=="lt"){
+                                        $query->whereOr($field,"<",$value);
+                                    }else if($type=="let"){
+                                        $query->whereOr($field,"<=",$value);
+                                    }else if($type=="like"){
+                                        $query->whereLike($field,$value,'or');
+                                    }else if($type=="neq"){
+                                        $query->whereOr($field,'<>', $value);
+                                    }else if($type=="neq"){
+                                        $query->whereIn($field,explode(",",$value),'or');
+                                    }else if($type=="null"){
+                                        $query->whereRightLike($field,$value,'or');
+                                    }else if($type=="notnull"){
+                                        $query->whereNotNull($field,$value,'or');
+                                    }else if($type=="rightlike"){
+                                        $query->whereRightLike($field, $value,'or');
+                                    }else if($type=="leftlike"){
+                                        $query->whereLeftLike($field, $value,'or');
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
 
                 // 区间范围 数据库字段_start & 数据库字段_end
                 $endField = "_start";
@@ -180,6 +222,25 @@ class DiygwQuery extends Query
                         continue;
                     }
                 }
+
+                $endField = "_gt";
+                if (Str::endsWith($field,$endField)) {
+                    $field = Str::snake(Str::substr($field,0,Str::length($field) - Str::length($endField)));
+                    if (in_array($field, array_keys($fields))) {
+                        $this->where($field, '>', $value);
+                        continue;
+                    }
+                }
+
+                $endField = "_lt";
+                if (Str::endsWith($field,$endField)) {
+                    $field = Str::snake(Str::substr($field,0,Str::length($field) - Str::length($endField)));
+                    if (in_array($field, array_keys($fields))) {
+                        $this->where($field, '<', $value);
+                        continue;
+                    }
+                }
+
                 $endField = "_end";
                 if (Str::endsWith($field,$endField)) {
                     $field = Str::snake(Str::substr($field,0,Str::length($field) - Str::length($endField)));
@@ -208,6 +269,24 @@ class DiygwQuery extends Query
                     }
                 }
 
+                $endField = "_notnull";
+                if (Str::endsWith($field,$endField)) {
+                    $field = Str::snake(Str::substr($field,0,Str::length($field) - Str::length($endField)));
+                    if (in_array($field, array_keys($fields))) {
+                        $this->whereNotNull($field);
+                        continue;
+                    }
+                }
+
+                $endField = "_null";
+                if (Str::endsWith($field,$endField)) {
+                    $field = Str::snake(Str::substr($field,0,Str::length($field) - Str::length($endField)));
+                    if (in_array($field, array_keys($fields))) {
+                        $this->whereNull($field);
+                        continue;
+                    }
+                }
+
                 // 模糊搜索
                 $endField = "_rightlike";
                 if (Str::endsWith($field,$endField)) {
@@ -222,25 +301,42 @@ class DiygwQuery extends Query
                 if (Str::endsWith($field,$endField)) {
                     $field = Str::snake(Str::substr($field,0,Str::length($field) - Str::length($endField)));
                     if (in_array($field, array_keys($fields))) {
-                        if(count($value)==2){
-                            $this->where($field, '>=', $value[0].' 00:00:00');
-                            $this->where($field, '<=', $value[1].' 23:59:59');
+                        if(is_string($value) && strpos($value," - ")!== false){
+                            $value =  explode(" - ",$value);
+                            if(count($value)==2){
+                                $this->where($field, '>=', $value[0].' 00:00:00');
+                                $this->where($field, '<=', $value[1].' 23:59:59');
+                            }
                         }
                         continue;
                     }
                 }
+                $endField = "_neq";
+                if (Str::endsWith($field,$endField)) {
+                    $field = Str::snake(Str::substr($field,0,Str::length($field) - Str::length($endField)));
+                    if (in_array($field, array_keys($fields))) {
+                        $this->where($field, '<>', $value);
+                        continue;
+                    }
+                }
+
                 $endField = "_eq";
                 if (Str::endsWith($field,$endField)) {
-                    $searchfields = explode("_",$field);
-                    //查询某个字段是否有限
-                    $searchTablefields = [];
-                    $tablefields = array_keys($fields);
-                    foreach ($searchfields as $tfield){
-                        if(in_array($tfield,$tablefields)){
-                            $searchTablefields[] = Str::snake($tfield);
-                        }
+                    $field = Str::snake(Str::substr($field,0,Str::length($field) - Str::length($endField)));
+                    if (in_array($field, array_keys($fields))) {
+                        $this->where($field, $value);
+                        continue;
                     }
-                    $this->where(implode("|",$searchTablefields),'=',$value );
+//                    $searchfields = explode("_",$field);
+//                    //查询某个字段是否有限
+//                    $searchTablefields = [];
+//                    $tablefields = array_keys($fields);
+//                    foreach ($searchfields as $tfield){
+//                        if(in_array($tfield,$tablefields)){
+//                            $searchTablefields[] = Str::snake($tfield);
+//                        }
+//                    }
+//                    $this->where(implode("|",$searchTablefields),'=',$value );
                     continue;
                 }
 
@@ -267,18 +363,47 @@ class DiygwQuery extends Query
                 }
 
 
+//                // = 值搜索
+//                if ($value || is_numeric($value)) {
+//                    $tablefield = Str::snake($field);
+//                    if (in_array($tablefield, array_keys($fields))) {
+//                        if(in_array($field,$likeField)){
+//                            $this->whereLike($tablefield, $value);
+//                        }else{
+//                            $this->where($tablefield, $value);
+//                        }
+//                    }
+//                    if($field=='isself' && $value=='1' && in_array('user_id',array_keys($fields))){
+//                        $this->where('user_id',\request()->userId);
+//                    }
+//                }
+
                 // = 值搜索
                 if ($value || is_numeric($value)) {
                     $tablefield = Str::snake($field);
                     if (in_array($tablefield, array_keys($fields))) {
-                        if(in_array($field,$likeField)){
-                            $this->whereLike($tablefield, $value);
-                        }else{
-                            $this->where($tablefield, $value);
+                        $findLike = false;
+                        //查找查似字段
+                        foreach ($likeField as $searchfield) {
+                            //查找每个字段是否存在|
+                            $searchfields = explode("|", $searchfield);
+                            if (in_array($field, $searchfields)) {
+                                $tablefields = [];
+                                foreach ($searchfields as $tfield) {
+                                    $tablefields[] = Str::snake($tfield);
+                                }
+                                $findLike = true;
+                                $this->where(implode("|", $tablefields), 'like', "%$value%");
+                            }
                         }
-                    }
-                    if($field=='isself' && $value=='1' && in_array('user_id',array_keys($fields))){
-                        $this->where('user_id',\request()->userId);
+                        //如果没找到
+                        if (!$findLike) {
+                            if (in_array($field, $arrayField)) {
+                                $this->where("JSON_CONTAINS({$tablefield},'{$value}')");
+                            } else {
+                                $this->where($tablefield, $value);
+                            }
+                        }
                     }
                 }
             }

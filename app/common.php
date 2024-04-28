@@ -148,6 +148,9 @@ function getFirstLetter($str) {
     }
 }
 
+
+
+
 function getAfterFirstUnderscore($str) {
     $pos = strpos($str, '_');
     if ($pos === false) {

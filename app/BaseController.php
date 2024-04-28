@@ -3,6 +3,11 @@ declare (strict_types = 1);
 
 namespace app;
 
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use thans\jwt\exception\TokenBlacklistException;
 use thans\jwt\exception\TokenExpiredException;
 use thans\jwt\exception\TokenInvalidException;
@@ -24,7 +29,9 @@ use think\Validate;
 abstract class BaseController
 {
     //是否显示所有数据
-    public $isAll = false;
+    public $isAll = true;
+    //是否导出
+    public $isExport = true;
     //是否初始化模型
     public $isModel = false;
     //判断是否全部不需要登录
@@ -82,6 +89,9 @@ abstract class BaseController
             try {
                 $payload = JWTAuth::auth(); //可验证token, 并获取token中的payload部分
                 $this->request->userId = $payload[$this->tokenKey];
+                if(isset( $payload['username'])){
+                    $this->request->sessionusername = $payload['username'];
+                }
                 $this->userId = $this->request->userId;
             } catch (\Exception $e) {
                 $msg = '登录过期';
@@ -333,6 +343,9 @@ abstract class BaseController
             }
 
             $data['userId'] = $this->request->userId;
+            if(!empty($this->request->sessionusername)){
+                $data['username'] = $this->request->sessionusername;
+            }
 
             if($this->checkData()){
                 //如果对应的主要不为空，表示修改记录
@@ -500,5 +513,126 @@ abstract class BaseController
     public function assign($name, $value)
     {
         View::assign($name,$value);
+    }
+
+    /**
+     * 加工导出表结构
+     * @param $fields
+     * @return mixed
+     */
+    public function getExportFields($fields){
+        //比如字典转换数据 可以参照导出角色RoleController里的getExportFields方法的处理。
+        return $fields;
+    }
+
+
+    public function getExportDatas($datas){
+        //比如字典转换数据 可以参照导出角色RoleController里的getExportFields方法的处理。
+        return $datas;
+    }
+
+    /**
+     * 获取导出表对应字段转换的数据
+     * @return array
+     */
+    public function getExportFieldsData(){
+        //比如字典转换数据 可以参照导出角色RoleController里的getExportFieldsData方法的处理。
+        return [];
+    }
+    /**
+     * @return App
+     */
+    public function export()
+    {
+        $spreadsheet = new Spreadsheet();
+        $writer = new Xlsx($spreadsheet);
+        $worksheet = $spreadsheet->getActiveSheet();
+        if(!$this->isExport){
+            $worksheet->setCellValue("A1", "无权限导出数据，请开启导出权限");
+            header('Content-Type: application/vnd.ms-excel');
+            header('Content-Disposition: attachment;filename="导出数据.xlsx"');
+            header('Cache-Control: max-age=0');
+            $writer->save('php://output');
+        }else{
+            $pageData = $this->model->getAllList();
+            $fields = $this->model->getFields();
+            $exportFields = [];
+            $excludeFields = ['create_by','update_by','delete_time'];
+            foreach ($fields as $field){
+                if(in_array($field['name'],$excludeFields)){
+                    continue;
+                }
+                if($field['name']=='create_time'){
+                    $field['comment'] = '创建时间';
+                }else if($field['name']=='update_time'){
+                    $field['comment'] = '创建时间';
+                }
+                $exportFields[] = $field;
+            }
+            //二次加工导出字段
+            $exportFields = $this->getExportFields($exportFields);
+            $exportFieldsData = $this->getExportFieldsData();
+
+            $rows = $pageData['rows'];
+            $rows  = $this->getExportDatas($rows);
+
+
+
+            $row_num = 1;
+            foreach ($exportFields as $index=>$field){
+                $cols_num = Coordinate::stringFromColumnIndex(($index+1));
+                $worksheet->getColumnDimension($cols_num)->setWidth(30);
+                $title = $field['comment'];
+                if(empty($title)){
+                    $title  = $field['name'];
+                }
+                $worksheet->setCellValue($cols_num.$row_num, $title);
+            }
+
+            foreach ($rows as $rowData){
+                $row_num++;
+                foreach ($exportFields as $index=>$field){
+                    $cols_num = Coordinate::stringFromColumnIndex(($index+1));
+                    //判断是否存在的字典转换数据
+                    if(isset($exportFieldsData[Str::camel($field['name'])])){
+                        $datas = $exportFieldsData[Str::camel($field['name'])];
+
+                        //查找有没有，如果没有还是直接照常输出值
+                        $value = $rowData[Str::camel($field['name'])];
+                        foreach ($datas as $data){
+                            //查找是否有对应转换的数据，有则输出
+                            if($data['value']==$rowData[Str::camel($field['name'])]){
+                                $value = $data['label'];
+                                break;
+                            }
+                        }
+                        $worksheet->setCellValue($cols_num.$row_num,$value);
+                    }else{
+                        $worksheet->setCellValue($cols_num.$row_num,$rowData[Str::camel($field['name'])]);
+                    }
+                }
+            }
+
+            //设置样式
+            $styleArray = [
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,   //水平居中
+                    'vertical' => Alignment::VERTICAL_CENTER,       //垂直居中
+                ],
+                'borders' => [
+                    'allBorders' => [   //所有边框
+                        'borderStyle' => Border::BORDER_THIN,
+                        'color' => ['argb' => '000000']
+                    ],
+                ],
+            ];
+            $columnEnd = Coordinate::stringFromColumnIndex((count($exportFields)));
+            $worksheet->getStyle('A1:'.$columnEnd.(count($rows)+1))->applyFromArray($styleArray);
+            header('Content-Type: application/vnd.ms-excel');
+            header('Content-Disposition: attachment;filename="导出数据.xlsx"');
+            header('Cache-Control: max-age=0');
+            $writer->save('php://output');
+        }
+
     }
 }
